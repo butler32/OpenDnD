@@ -14,19 +14,24 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <Border Grid.Row="0" BorderBrush="Black" BorderThickness="2" CornerRadius="5" Padding="5" Margin="30">
-            <TextBox Text="Address" VerticalAlignment="Center" FontSize="30" BorderBrush="Transparent" />
-        </Border>
-        
+        <StackPanel Margin="30">
+            <Label>AlfaZero</Label>
+
+            <Border Grid.Row="0" BorderBrush="Black" BorderThickness="2" CornerRadius="5" Padding="5" >
+                <TextBox Name="Address" VerticalAlignment="Center" FontSize="30" BorderBrush="Transparent" />
+            </Border>
+        </StackPanel>
+
+
         <Border Grid.Row="1" BorderBrush="Black" BorderThickness="2" CornerRadius="5" Padding="5" Margin="30">
-            <TextBox Text="Login" VerticalAlignment="Center" FontSize="30" BorderBrush="Transparent" />
+            <TextBox Name="UserName"  VerticalAlignment="Center" FontSize="30" BorderBrush="Transparent" />
         </Border>
 
         <Border Grid.Row="2" BorderBrush="Black" BorderThickness="2" CornerRadius="5" Padding="5" Margin="30">
-            <TextBox Text="Password" VerticalAlignment="Center" FontSize="30" BorderBrush="Transparent" />
+            <TextBox Name="Password" Text="Password" VerticalAlignment="Center" FontSize="30" BorderBrush="Transparent" />
         </Border>
         
-        <Button Content="Connect" Grid.Row="3" Margin="20" FontSize="30" />
+        <Button Content="Connect" Grid.Row="3" Margin="20" FontSize="30" Click="Button_Click"/>
 
     </Grid>
 </Window>

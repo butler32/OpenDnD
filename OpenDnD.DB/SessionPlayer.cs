@@ -1,13 +1,13 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 
 namespace OpenDnD.DB
 {
+    [PrimaryKey(nameof(SessionId), nameof(PlayerId))]
     public class SessionPlayer
     {
-        [Key]
         public Guid SessionId { get; set;}
         public virtual Session Session { get; set; }
-        [Key]
         public Guid PlayerId { get; set; }
         public virtual Player Player { get; set; }
 

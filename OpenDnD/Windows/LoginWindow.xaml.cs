@@ -1,10 +1,13 @@
-﻿using System;
+﻿using Microsoft.Extensions.DependencyInjection;
+using OpenDnD.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
@@ -19,9 +22,25 @@ namespace OpenDnD.Windows
     /// </summary>
     public partial class LoginWindow : Window
     {
-        public LoginWindow()
+        public LoginWindow(IAuthService authService, IServiceProvider serviceProvider)
         {
             InitializeComponent();
+            AuthService = authService;
+            ServiceProvider = serviceProvider;
+        }
+
+        public IAuthService AuthService { get; }
+        public IServiceProvider ServiceProvider { get; }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            var authToken = AuthService.Authenticate(new Uri(Address.Text), UserName.Text, Password.Text);
+            var ssw = ServiceProvider.GetRequiredService<SectionSelectionWindow>();
+            this.Close();
+
+            ssw.SetAuthToken(authToken);
+            ssw.Show();
+            ssw.Begin();
         }
     }
 }

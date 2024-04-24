@@ -1,4 +1,5 @@
-﻿using System;
+﻿using OpenDnD.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -19,9 +20,27 @@ namespace OpenDnD.Windows
     /// </summary>
     public partial class SectionSelectionWindow : Window
     {
-        public SectionSelectionWindow()
+        public ISessionService SessionService { get; }
+        public IAuthService AuthService { get; }
+        public AuthToken AuthToken { get; private set; }
+
+        public List<Session> Sessions { get; private set; }
+        public SectionSelectionWindow(ISessionService sessionService, IAuthService authService)
         {
+            SessionService = sessionService;
+            AuthService = authService;
             InitializeComponent();
         }
+
+        public void SetAuthToken(AuthToken authToken)
+        {
+            AuthToken = authToken;
+        }
+
+        public void Begin()
+        {
+            Sessions = SessionService.GetSessionList(AuthToken);
+        }
+        
     }
 }
