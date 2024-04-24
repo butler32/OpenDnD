@@ -5,7 +5,11 @@ VisualStudioVersion = 17.7.34221.43
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenDnD", "OpenDnD\OpenDnD.csproj", "{F4C1A408-5C23-44EC-B680-526B162FB066}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenDnD.Interfaces", "OpenDnD.Interfaces\OpenDnD.Interfaces.csproj", "{159A095F-376B-413B-850F-3BB5898C0D48}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenDnD.Interfaces", "OpenDnD.Interfaces\OpenDnD.Interfaces.csproj", "{159A095F-376B-413B-850F-3BB5898C0D48}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenDnD.DB", "OpenDnD.DB\OpenDnD.DB.csproj", "{54E20761-DB60-4D78-92D3-26543BAC6B50}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenDnD.DB.Services", "OpenDnD.DB.Services\OpenDnD.DB.Services.csproj", "{7A3EB95F-1C85-4C33-9182-CAB815B439AA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +25,14 @@ Global
 		{159A095F-376B-413B-850F-3BB5898C0D48}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{159A095F-376B-413B-850F-3BB5898C0D48}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{159A095F-376B-413B-850F-3BB5898C0D48}.Release|Any CPU.Build.0 = Release|Any CPU
+		{54E20761-DB60-4D78-92D3-26543BAC6B50}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{54E20761-DB60-4D78-92D3-26543BAC6B50}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{54E20761-DB60-4D78-92D3-26543BAC6B50}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{54E20761-DB60-4D78-92D3-26543BAC6B50}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7A3EB95F-1C85-4C33-9182-CAB815B439AA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7A3EB95F-1C85-4C33-9182-CAB815B439AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7A3EB95F-1C85-4C33-9182-CAB815B439AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7A3EB95F-1C85-4C33-9182-CAB815B439AA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
