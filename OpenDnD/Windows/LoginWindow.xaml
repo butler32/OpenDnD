@@ -1,0 +1,32 @@
+﻿<Window x:Class="OpenDnD.Windows.LoginWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:OpenDnD.Windows"
+        mc:Ignorable="d"
+        Title="LoginWindow" Height="600" Width="500">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <Border Grid.Row="0" BorderBrush="Black" BorderThickness="2" CornerRadius="5" Padding="5" Margin="30">
+            <TextBox Text="Address" VerticalAlignment="Center" FontSize="30" BorderBrush="Transparent" />
+        </Border>
+        
+        <Border Grid.Row="1" BorderBrush="Black" BorderThickness="2" CornerRadius="5" Padding="5" Margin="30">
+            <TextBox Text="Login" VerticalAlignment="Center" FontSize="30" BorderBrush="Transparent" />
+        </Border>
+
+        <Border Grid.Row="2" BorderBrush="Black" BorderThickness="2" CornerRadius="5" Padding="5" Margin="30">
+            <TextBox Text="Password" VerticalAlignment="Center" FontSize="30" BorderBrush="Transparent" />
+        </Border>
+        
+        <Button Content="Connect" Grid.Row="3" Margin="20" FontSize="30" />
+
+    </Grid>
+</Window>
