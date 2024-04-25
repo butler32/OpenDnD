@@ -40,7 +40,48 @@ namespace OpenDnD.Windows
         public void Begin()
         {
             Sessions = SessionService.GetSessionList(AuthToken);
+            Sessions.Add(new Session
+            {
+                SessionId = new Guid(),
+                SessionName = "Session 1"
+            });
+            Sessions.Add(new Session
+            {
+                SessionId = new Guid(),
+                SessionName = "Session 2"
+            });
+            Sessions.Add(new Session
+            {
+                SessionId = new Guid(),
+                SessionName = "Session 3"
+            });
+            Sessions.Add(new Session
+            {
+                SessionId = new Guid(),
+                SessionName = "Session 4"
+            });
+
+            SessionsList.ItemsSource = Sessions;
         }
-        
+
+        private void DeleteSessionButton_Click(object sender, RoutedEventArgs e)
+        {
+            var selectedSession = SessionsList.SelectedItem as Session;
+
+            if (selectedSession != null)
+            {
+                Sessions.Remove(selectedSession);
+                SessionsList.Items.Refresh();
+            }
+            else
+            {
+                MessageBox.Show("No session is selected.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private void CreateSessionButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

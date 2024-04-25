@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:OpenDnD.Windows"
         mc:Ignorable="d"
-        Title="LoginWindow" Height="600" Width="500">
+        Title="LoginWindow" Height="700" Width="500">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
@@ -14,23 +14,30 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <StackPanel Margin="30">
-            <Label>AlfaZero</Label>
+        <StackPanel Margin="20">
+            <Label FontSize="30">Address</Label>
 
             <Border Grid.Row="0" BorderBrush="Black" BorderThickness="2" CornerRadius="5" Padding="5" >
                 <TextBox Name="Address" VerticalAlignment="Center" FontSize="30" BorderBrush="Transparent" />
             </Border>
         </StackPanel>
 
+        <StackPanel Margin="20" Grid.Row="1">
+            <Label FontSize="30">Login</Label>
+            
+            <Border Grid.Row="1" BorderBrush="Black" BorderThickness="2" CornerRadius="5" Padding="5">
+                <TextBox Name="UserName"  VerticalAlignment="Center" FontSize="30" BorderBrush="Transparent" />
+            </Border>
+        </StackPanel>
 
-        <Border Grid.Row="1" BorderBrush="Black" BorderThickness="2" CornerRadius="5" Padding="5" Margin="30">
-            <TextBox Name="UserName"  VerticalAlignment="Center" FontSize="30" BorderBrush="Transparent" />
-        </Border>
+        <StackPanel Margin="20" Grid.Row="2">
+            <Label FontSize="30">Password</Label>
 
-        <Border Grid.Row="2" BorderBrush="Black" BorderThickness="2" CornerRadius="5" Padding="5" Margin="30">
-            <TextBox Name="Password" Text="Password" VerticalAlignment="Center" FontSize="30" BorderBrush="Transparent" />
-        </Border>
-        
+            <Border Grid.Row="2" BorderBrush="Black" BorderThickness="2" CornerRadius="5" Padding="5">
+                <TextBox Name="Password" VerticalAlignment="Center" FontSize="30" BorderBrush="Transparent" />
+            </Border>
+        </StackPanel>
+
         <Button Content="Connect" Grid.Row="3" Margin="20" FontSize="30" Click="Button_Click"/>
 
     </Grid>
