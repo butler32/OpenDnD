@@ -39,6 +39,7 @@ namespace OpenDnD
                     services.AddTransient<SessionSelectionWindow>();
                     services.AddTransient<SessionCreationWindow>();
                     services.AddTransient<SessionInviterWindow>();
+                    services.AddSingleton(x => new Secret { SecretKey = "UpEpMJRbaFfDoj9pRPAw780uGPeDCnpBi3zQzb3CTLK1Z0lmTkZZS29ViVhvQrElFK26iSz03fC7wqLx8pbvbMIaYqlUOXJZ" });
 
                     services.AddSingleton(x =>
                     {
