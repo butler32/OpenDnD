@@ -8,10 +8,12 @@
         Title="LoginWindow" Height="700" Width="500">
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="2*" />
             <RowDefinition Height="*" />
-            <RowDefinition Height="*" />
-            <RowDefinition Height="*" />
-            <RowDefinition Height="*" />
+            
         </Grid.RowDefinitions>
 
         <StackPanel Margin="20">
@@ -26,7 +28,7 @@
             <Label FontSize="30">Login</Label>
             
             <Border Grid.Row="1" BorderBrush="Black" BorderThickness="2" CornerRadius="5" Padding="5">
-                <TextBox Name="UserName"  VerticalAlignment="Center" FontSize="30" BorderBrush="Transparent" />
+                <TextBox Text="butler" Name="UserName"  VerticalAlignment="Center" FontSize="30" BorderBrush="Transparent" />
             </Border>
         </StackPanel>
 
@@ -34,11 +36,15 @@
             <Label FontSize="30">Password</Label>
 
             <Border Grid.Row="2" BorderBrush="Black" BorderThickness="2" CornerRadius="5" Padding="5">
-                <TextBox Name="Password" VerticalAlignment="Center" FontSize="30" BorderBrush="Transparent" />
+                <TextBox Text="123" Name="Password" VerticalAlignment="Center" FontSize="30" BorderBrush="Transparent" />
             </Border>
         </StackPanel>
 
-        <Button Content="Connect" Grid.Row="3" Margin="20" FontSize="30" Click="Button_Click"/>
+        <Button Content="Connect" Grid.Row="3" Margin="20" FontSize="30" Click="ConnectButton_Click"/>
+        
+        <Button Content="Смена пароля" FontSize="30" Margin="30 0 0 0" Grid.Row="4" HorizontalAlignment="Left" />
+        
+        <Button Grid.Row="4" Content="Регистрация" FontSize="30" Margin="0 0 30 0" HorizontalAlignment="Right" Click="RegisterButton_Click" />
 
     </Grid>
 </Window>
