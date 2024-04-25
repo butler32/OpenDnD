@@ -32,11 +32,16 @@ namespace OpenDnD.DB.Services
             throw new NotImplementedException();
         }
 
-        public Guid CreateSession(AuthToken authToken, SessionMapRequest request)
+        public Guid CreateSession(AuthToken authToken, SessionRequest request)
         {
             var session = new Session
             {
-                SessionName = request.SessionName
+                SessionName = request.SessionName,
+                Players = request.PlayersIds?.Select(p => new SessionPlayer
+                {
+                    PlayerId = p,
+                    PlayerRole = "Player"
+                }).ToList()
             };
             OpenDnDContext.Sessions.Add(session);
             OpenDnDContext.SaveChanges();
@@ -75,11 +80,18 @@ namespace OpenDnD.DB.Services
             OpenDnDContext.SessionPlayers.Where(x => x.SessionId == sessionId && x.PlayerId == userId).ExecuteDelete();
         }
 
-        public void UpdateSession(AuthToken authToken, Guid id, SessionMapRequest request)
+        public void UpdateSession(AuthToken authToken, Guid id, SessionRequest request)
         {
             var session = OpenDnDContext.Sessions.FirstOrDefault(x => x.SessionId == id);
             session.SessionName = request.SessionName;
             OpenDnDContext.SaveChanges();
+        }
+
+        public List<SessionPlayer> GetSessionPlayers(AuthToken authToken, Guid sessionId)
+        {
+            return OpenDnDContext.SessionPlayers
+                .Where(x => x.SessionId == sessionId)
+                .ToList();
         }
     }
 }

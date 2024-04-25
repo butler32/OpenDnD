@@ -35,7 +35,7 @@ namespace OpenDnD.Windows
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             var authToken = AuthService.Authenticate(new Uri(Address.Text), UserName.Text, Password.Text);
-            var ssw = ServiceProvider.GetRequiredService<SectionSelectionWindow>();
+            var ssw = ServiceProvider.GetRequiredService<SessionSelectionWindow>();
             this.Close();
 
             ssw.SetAuthToken(authToken);
