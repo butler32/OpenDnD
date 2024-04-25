@@ -73,7 +73,6 @@ namespace OpenDnD.Windows
             {
                 SessionId = SessionService.Create(AuthToken, new SessionRequest
                 {
-                    SessionId = Guid.NewGuid(),
                     SessionName = SessionName.Text,
                 });
             }
@@ -81,7 +80,6 @@ namespace OpenDnD.Windows
             {
                 SessionService.Update(AuthToken, CurrentSession.SessionId, new SessionRequest
                 {
-                    SessionId = CurrentSession.SessionId,
                     SessionName = SessionName.Text,
                 });
             }

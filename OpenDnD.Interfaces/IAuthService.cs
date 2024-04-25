@@ -23,6 +23,14 @@ namespace OpenDnD.Interfaces
         public AuthToken Authenticate(Uri address, string login, string password);
         public bool ValidateAuthToken(AuthToken authToken);
     }
+    public static class IAuthServiceExt
+    {
+        public static void ValidateAuthTokenAndThrowExceptionOnError(this IAuthService authService, AuthToken authToken)
+        {
+            if (!authService.ValidateAuthToken(authToken))
+                throw new Exception("Invalid Authentication Token");
+        }
+    }
 
     public class CryptoPoolPolicy : PooledObjectPolicy<SHA512>
     {
