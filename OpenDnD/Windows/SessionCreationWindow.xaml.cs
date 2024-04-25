@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore.Query.Internal;
+using OpenDnD.DB;
 using OpenDnD.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -25,7 +26,9 @@ namespace OpenDnD.Windows
         public IAuthService AuthService { get; }
         public IServiceProvider ServiceProvider { get; }
         public AuthToken AuthToken { get; private set; }
-        public Session CurrentSession { get; private set; }
+        public Guid? SessionId { get; private set; }
+        public Interfaces.Session CurrentSession { get; private set; }
+        public List<SessionPlayer> Players { get; private set; }
 
         public SessionCreationWindow(ISessionService sessionService, IAuthService authService, IServiceProvider serviceProvider)
         {
@@ -40,26 +43,53 @@ namespace OpenDnD.Windows
             AuthToken = authToken;
         }
 
-        public void SetSession(Guid sessionId)
+        public void SetSessionId(Guid sessionId)
         {
-            CurrentSession = SessionService.GetSession(AuthToken, sessionId);
-            SessionName.Text = CurrentSession.SessionName;
+            SessionId = sessionId;
+            CurrentSession = SessionService.GetSession(AuthToken, SessionId.Value);
+            Players = SessionService.GetSessionPlayers(AuthToken, SessionId.Value);
+            PlayersList.ItemsSource = Players;
         }
 
-        protected override void OnClosed(EventArgs e)
-        {
-            SessionService.UpdateSession(AuthToken, CurrentSession.SessionId, new SessionRequest
-            {
-                SessionId = CurrentSession.SessionId,
-                SessionName = SessionName.Text,
-            });
+        //protected override void OnClosed(EventArgs e)
+        //{
+        //    SessionService.UpdateSession(AuthToken, CurrentSession.SessionId, new SessionRequest
+        //    {
+        //        SessionId = CurrentSession.SessionId,
+        //        SessionName = SessionName.Text,
+        //    });
 
-            base.OnClosed(e);
-        }
+        //    base.OnClosed(e);
+        //}
 
         private void InvitePlayerButton_Click(object sender, RoutedEventArgs e)
         {
 
+        }
+
+        private void SaveSessionButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (SessionId == null) 
+            {
+                SessionId = SessionService.CreateSession(AuthToken, new SessionRequest
+                {
+                    SessionId = Guid.NewGuid(),
+                    SessionName = SessionName.Text,
+                });
+            }
+            else
+            {
+                SessionService.UpdateSession(AuthToken, CurrentSession.SessionId, new SessionRequest
+                {
+                    SessionId = CurrentSession.SessionId,
+                    SessionName = SessionName.Text,
+                });
+            }
+        }
+
+        private void CancelButton_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
         }
     }
 }

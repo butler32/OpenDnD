@@ -64,15 +64,8 @@ namespace OpenDnD.Windows
 
         private void CreateSessionButton_Click(object sender, RoutedEventArgs e)
         {
-            var sessionId = SessionService.CreateSession(AuthToken, new SessionRequest
-            {
-                SessionName = "New Session",
-                SessionId = new Guid(),
-            });
-
             var scw = ServiceProvider.GetRequiredService<SessionCreationWindow>();
             scw.SetAuthToken(AuthToken);
-            scw.SetSession(sessionId);
             scw.ShowDialog();
             Begin();
         }

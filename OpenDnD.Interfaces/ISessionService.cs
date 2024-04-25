@@ -1,9 +1,12 @@
-﻿namespace OpenDnD.Interfaces
+﻿using OpenDnD.DB;
+
+namespace OpenDnD.Interfaces
 {
     public class SessionRequest
     {
         public Guid SessionId { get; set; }
         public string SessionName { get; set; }
+        public List<Guid> PlayersIds {  get; set; }
     }
 
     public class Session
@@ -23,6 +26,7 @@
         event SessionChatMessageChanged OnSessionChatMessageChanged;
 
         public void ChangeCurrentSessionMap(AuthToken authToken, Guid sessionId, Guid sessionMapId);
+        public List<SessionPlayer> GetSessionPlayers(AuthToken authToken, Guid sessionId);
 
     }
 

@@ -36,7 +36,12 @@ namespace OpenDnD.DB.Services
         {
             var session = new Session
             {
-                SessionName = request.SessionName
+                SessionName = request.SessionName,
+                Players = request.PlayersIds?.Select(p => new SessionPlayer
+                {
+                    PlayerId = p,
+                    PlayerRole = "Player"
+                }).ToList()
             };
             OpenDnDContext.Sessions.Add(session);
             OpenDnDContext.SaveChanges();
@@ -80,6 +85,13 @@ namespace OpenDnD.DB.Services
             var session = OpenDnDContext.Sessions.FirstOrDefault(x => x.SessionId == id);
             session.SessionName = request.SessionName;
             OpenDnDContext.SaveChanges();
+        }
+
+        public List<SessionPlayer> GetSessionPlayers(AuthToken authToken, Guid sessionId)
+        {
+            return OpenDnDContext.SessionPlayers
+                .Where(x => x.SessionId == sessionId)
+                .ToList();
         }
     }
 }
