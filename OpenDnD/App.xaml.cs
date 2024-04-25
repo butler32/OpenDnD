@@ -36,7 +36,7 @@ namespace OpenDnD
                 {
                     services.AddSingleton<App>();
                     services.AddTransient<LoginWindow>();
-                    services.AddTransient<SectionSelectionWindow>();
+                    services.AddTransient<SessionSelectionWindow>();
                     services.AddTransient<SessionCreationWindow>();
                     services.AddTransient<SessionInviterWindow>();
 

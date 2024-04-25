@@ -32,7 +32,7 @@ namespace OpenDnD.DB.Services
             throw new NotImplementedException();
         }
 
-        public Guid CreateSession(AuthToken authToken, SessionMapRequest request)
+        public Guid CreateSession(AuthToken authToken, SessionRequest request)
         {
             var session = new Session
             {
@@ -75,7 +75,7 @@ namespace OpenDnD.DB.Services
             OpenDnDContext.SessionPlayers.Where(x => x.SessionId == sessionId && x.PlayerId == userId).ExecuteDelete();
         }
 
-        public void UpdateSession(AuthToken authToken, Guid id, SessionMapRequest request)
+        public void UpdateSession(AuthToken authToken, Guid id, SessionRequest request)
         {
             var session = OpenDnDContext.Sessions.FirstOrDefault(x => x.SessionId == id);
             session.SessionName = request.SessionName;

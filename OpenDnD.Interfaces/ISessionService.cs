@@ -2,7 +2,8 @@
 {
     public class SessionRequest
     {
-
+        public Guid SessionId { get; set; }
+        public string SessionName { get; set; }
     }
 
     public class Session
@@ -10,7 +11,7 @@
         public Guid SessionId { get; set; }
         public string SessionName { get; set; }
     }
-    public interface ISessionService : ICRUDService<Session, SessionMapRequest>
+    public interface ISessionService : ICRUDService<Session, SessionRequest>
     {
         public void AddPlayerToSession(AuthToken authToken, Guid sessionId, Guid userId, string playerRole);
         public void RemovePlayerFromSession(AuthToken authToken, Guid sessionId, Guid userId);

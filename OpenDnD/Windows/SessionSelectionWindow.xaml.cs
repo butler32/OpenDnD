@@ -1,4 +1,5 @@
-﻿using OpenDnD.Interfaces;
+﻿using Microsoft.Extensions.DependencyInjection;
+using OpenDnD.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,17 +17,19 @@ using System.Windows.Shapes;
 namespace OpenDnD.Windows
 {
     /// <summary>
-    /// Interaction logic for SectionSelectionWindow.xaml
+    /// Interaction logic for SessionSelectionWindow.xaml
     /// </summary>
-    public partial class SectionSelectionWindow : Window
+    public partial class SessionSelectionWindow : Window
     {
         public ISessionService SessionService { get; }
         public IAuthService AuthService { get; }
+        public IServiceProvider ServiceProvider { get; }
         public AuthToken AuthToken { get; private set; }
 
         public List<Session> Sessions { get; private set; }
-        public SectionSelectionWindow(ISessionService sessionService, IAuthService authService)
+        public SessionSelectionWindow(ISessionService sessionService, IAuthService authService, IServiceProvider serviceProvider)
         {
+            ServiceProvider = serviceProvider;
             SessionService = sessionService;
             AuthService = authService;
             InitializeComponent();
@@ -40,27 +43,7 @@ namespace OpenDnD.Windows
         public void Begin()
         {
             Sessions = SessionService.GetSessionList(AuthToken);
-            Sessions.Add(new Session
-            {
-                SessionId = new Guid(),
-                SessionName = "Session 1"
-            });
-            Sessions.Add(new Session
-            {
-                SessionId = new Guid(),
-                SessionName = "Session 2"
-            });
-            Sessions.Add(new Session
-            {
-                SessionId = new Guid(),
-                SessionName = "Session 3"
-            });
-            Sessions.Add(new Session
-            {
-                SessionId = new Guid(),
-                SessionName = "Session 4"
-            });
-
+            
             SessionsList.ItemsSource = Sessions;
         }
 
@@ -70,8 +53,8 @@ namespace OpenDnD.Windows
 
             if (selectedSession != null)
             {
-                Sessions.Remove(selectedSession);
-                SessionsList.Items.Refresh();
+                SessionService.DeleteSession(AuthToken, selectedSession.SessionId);
+                Begin();
             }
             else
             {
@@ -81,7 +64,17 @@ namespace OpenDnD.Windows
 
         private void CreateSessionButton_Click(object sender, RoutedEventArgs e)
         {
+            var sessionId = SessionService.CreateSession(AuthToken, new SessionRequest
+            {
+                SessionName = "New Session",
+                SessionId = new Guid(),
+            });
 
+            var scw = ServiceProvider.GetRequiredService<SessionCreationWindow>();
+            scw.SetAuthToken(AuthToken);
+            scw.SetSession(sessionId);
+            scw.ShowDialog();
+            Begin();
         }
     }
 }
