@@ -32,8 +32,9 @@ namespace OpenDnD.DB.Services
             throw new NotImplementedException();
         }
 
-        public Guid CreateSession(AuthToken authToken, SessionRequest request)
+        public Guid Create(AuthToken authToken, SessionRequest request)
         {
+            ArgumentNullException.ThrowIfNull(request.SessionName, nameof(SessionRequest.SessionName));
             var session = new Session
             {
                 SessionName = request.SessionName,
@@ -49,12 +50,12 @@ namespace OpenDnD.DB.Services
             return session.SessionId;
         }
 
-        public void DeleteSession(AuthToken authToken, Guid id)
+        public void Delete(AuthToken authToken, Guid id)
         {
             OpenDnDContext.Sessions.Where(x => x.SessionId == id).ExecuteDelete();
         }
 
-        public Interfaces.Session GetSession(AuthToken authToken, Guid id)
+        public Interfaces.Session Get(AuthToken authToken, Guid id)
         {
             var session = OpenDnDContext.Sessions.FirstOrDefault(x => x.SessionId == id);
             return new Interfaces.Session
@@ -64,7 +65,7 @@ namespace OpenDnD.DB.Services
             };
         }
 
-        public List<Interfaces.Session> GetSessionList(AuthToken authToken)
+        public List<Interfaces.Session> GetList(AuthToken authToken)
         {
             return OpenDnDContext.Sessions
                 .Select(x => new Interfaces.Session
@@ -80,10 +81,14 @@ namespace OpenDnD.DB.Services
             OpenDnDContext.SessionPlayers.Where(x => x.SessionId == sessionId && x.PlayerId == userId).ExecuteDelete();
         }
 
-        public void UpdateSession(AuthToken authToken, Guid id, SessionRequest request)
+        public void Update(AuthToken authToken, Guid id, SessionRequest request)
         {
             var session = OpenDnDContext.Sessions.FirstOrDefault(x => x.SessionId == id);
-            session.SessionName = request.SessionName;
+            if (request.SessionName is not null)
+            {
+                session.SessionName = request.SessionName;
+            }
+            
             OpenDnDContext.SaveChanges();
         }
 

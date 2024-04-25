@@ -15,6 +15,7 @@ namespace OpenDnD.DB
     }
     public class OpenDnDContext : DbContext
     {
+        public DbSet<PlayerCharacters> PlayerCharacters { get; set; }
         public DbSet<Image> Images { get; set; }
         public DbSet<Player> Players { get; set; }
         public DbSet<Session> Sessions { get; set; }

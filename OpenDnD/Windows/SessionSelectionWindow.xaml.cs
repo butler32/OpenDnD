@@ -42,7 +42,7 @@ namespace OpenDnD.Windows
 
         public void Begin()
         {
-            Sessions = SessionService.GetSessionList(AuthToken);
+            Sessions = SessionService.GetList(AuthToken);
             
             SessionsList.ItemsSource = Sessions;
         }
@@ -53,7 +53,7 @@ namespace OpenDnD.Windows
 
             if (selectedSession != null)
             {
-                SessionService.DeleteSession(AuthToken, selectedSession.SessionId);
+                SessionService.Delete(AuthToken, selectedSession.SessionId);
                 Begin();
             }
             else

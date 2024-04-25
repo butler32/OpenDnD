@@ -46,14 +46,14 @@ namespace OpenDnD.Windows
         public void SetSessionId(Guid sessionId)
         {
             SessionId = sessionId;
-            CurrentSession = SessionService.GetSession(AuthToken, SessionId.Value);
+            CurrentSession = SessionService.Get(AuthToken, SessionId.Value);
             Players = SessionService.GetSessionPlayers(AuthToken, SessionId.Value);
             PlayersList.ItemsSource = Players;
         }
 
         //protected override void OnClosed(EventArgs e)
         //{
-        //    SessionService.UpdateSession(AuthToken, CurrentSession.SessionId, new SessionRequest
+        //    SessionService.Update(AuthToken, CurrentSession.SessionId, new SessionRequest
         //    {
         //        SessionId = CurrentSession.SessionId,
         //        SessionName = SessionName.Text,
@@ -71,7 +71,7 @@ namespace OpenDnD.Windows
         {
             if (SessionId == null) 
             {
-                SessionId = SessionService.CreateSession(AuthToken, new SessionRequest
+                SessionId = SessionService.Create(AuthToken, new SessionRequest
                 {
                     SessionId = Guid.NewGuid(),
                     SessionName = SessionName.Text,
@@ -79,7 +79,7 @@ namespace OpenDnD.Windows
             }
             else
             {
-                SessionService.UpdateSession(AuthToken, CurrentSession.SessionId, new SessionRequest
+                SessionService.Update(AuthToken, CurrentSession.SessionId, new SessionRequest
                 {
                     SessionId = CurrentSession.SessionId,
                     SessionName = SessionName.Text,

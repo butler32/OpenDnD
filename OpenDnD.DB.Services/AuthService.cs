@@ -5,14 +5,18 @@ namespace OpenDnD.DB.Services
 {
     public class AuthService : IAuthService
     {
-        public AuthService(OpenDnDContext openDnDContext, Secret secret)
+        public AuthService(OpenDnDContext openDnDContext, Secret secret, IPlayerService playerService, ApplicationAuthToken applicationAuthToken)
         {
             OpenDnDContext = openDnDContext;
             Secret = secret;
+            PlayerService = playerService;
+            ApplicationAuthToken = applicationAuthToken;
         }
 
         OpenDnDContext OpenDnDContext { get; }
         Secret Secret { get; }
+        public IPlayerService PlayerService { get; }
+        public ApplicationAuthToken ApplicationAuthToken { get; }
 
         public AuthToken Register(Uri address, string login, string password)
         {
@@ -20,21 +24,17 @@ namespace OpenDnD.DB.Services
                 throw new Exception("User already exist");
             var (hash, salt) = CryptoService.GetHashSaltPair(password);
 
-            var user = new Player
+            var playerId = PlayerService.Create(ApplicationAuthToken.AuthToken, new PlayerRequest
             {
-                PasswordHash = hash,
                 PasswordSalt = salt,
-                PlayerId = Guid.NewGuid(),
+                PasswordHash = hash,
                 UserName = login,
-            };
+            });
 
-            OpenDnDContext.Players.Add(user);
-            OpenDnDContext.SaveChanges();
-
-            var token = CryptoService.GetAuthToken(user.PlayerId, Secret.SecretKey);
+            var token = CryptoService.GetAuthToken(playerId, Secret.SecretKey);
 
             return new AuthToken { 
-                PlayerId = user.PlayerId,
+                PlayerId = playerId,
                 TokenValue = token,
             };
 

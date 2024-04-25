@@ -35,6 +35,19 @@ namespace OpenDnD
                 .ConfigureServices(services =>
                 {
                     services.AddSingleton<App>();
+                    services.AddSingleton<ApplicationAuthToken>(x => 
+                    {
+                        var Secret = x.GetRequiredService<Secret>();
+                        var token = CryptoService.GetAuthToken(Guid.Empty, Secret.SecretKey);
+                        return new ApplicationAuthToken
+                        {
+                            AuthToken = new AuthToken
+                            {
+                                PlayerId = Guid.Empty,
+                                TokenValue = token
+                            }
+                        };
+                    });
                     services.AddTransient<LoginWindow>();
                     services.AddTransient<SessionSelectionWindow>();
                     services.AddTransient<SessionCreationWindow>();
@@ -54,7 +67,7 @@ namespace OpenDnD
                         x.UseSqlite(config.ConnectionString);
                     }, ServiceLifetime.Transient);
 
-                    services.AddTransient<IAuthService, AuthService>();
+                    services.AddTransient<IAuthService, PlayerService>();
                     services.AddTransient<ISessionService, SessionService>();
                     
                 })

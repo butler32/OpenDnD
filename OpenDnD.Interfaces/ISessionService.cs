@@ -5,7 +5,7 @@ namespace OpenDnD.Interfaces
     public class SessionRequest
     {
         public Guid SessionId { get; set; }
-        public string SessionName { get; set; }
+        public string? SessionName { get; set; }
         public List<Guid> PlayersIds {  get; set; }
     }
 
