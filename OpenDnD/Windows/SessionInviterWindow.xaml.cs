@@ -1,16 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using OpenDnD.DB.Services;
+using OpenDnD.Interfaces;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace OpenDnD.Windows
 {
@@ -19,9 +9,43 @@ namespace OpenDnD.Windows
     /// </summary>
     public partial class SessionInviterWindow : Window
     {
-        public SessionInviterWindow()
+        public SessionInviterWindow(ISessionService sessionService, IPlayerService playerService)
         {
             InitializeComponent();
+            SessionService = sessionService;
+            PlayerService = playerService;
+        }
+
+        public AuthToken AuthToken { get; private set; }
+        public Guid SessionId { get; private set; }
+        public ISessionService SessionService { get; }
+        public IPlayerService PlayerService { get; }
+
+        public void SetAuthToken(AuthToken authToken)
+        {
+            AuthToken = authToken;
+        }
+
+        public void SetSessionId(Guid sessionId)
+        {
+            SessionId = sessionId;
+        }
+
+        private void InviteButton_Click(object sender, RoutedEventArgs e)
+        {
+            Interfaces.Player player;
+            try
+            {
+                player = PlayerService.GetPlayerByName(AuthToken, UserName.Text);
+            }
+            catch (Exception w) 
+            {
+                MessageBox.Show(w.Message);
+                return;
+            }
+
+            SessionService.AddPlayerToSession(AuthToken, SessionId, player.PlayerId, RoleSelector.SelectedItem == "Игрок" ? RoleEnum.Player : RoleEnum.Spectator);
+            Close();
         }
     }
 }

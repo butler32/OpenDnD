@@ -137,5 +137,19 @@ namespace OpenDnD.DB.Services
             return OpenDnDContext.Players.Where(x => P.Contains(x.PlayerId))
                 .Select(x => new Interfaces.Player(x.PlayerId, x.UserName)).ToList();
         }
+
+        public Interfaces.Player GetPlayerByName(AuthToken authToken, string name)
+        {
+            AuthService.ValidateAuthTokenAndThrowExceptionOnError(authToken);
+
+            var player = OpenDnDContext.Players.FirstOrDefault(x => x.UserName == name);
+
+            if (player is null)
+            {
+                throw new Exception("Player not found");
+            }
+
+            return new Interfaces.Player(player.PlayerId, player.UserName);
+        }
     }
 }

@@ -1,4 +1,6 @@
-﻿using OpenDnD.Interfaces;
+﻿using Microsoft.Extensions.DependencyInjection;
+using OpenDnD.Interfaces;
+using System.Data.SqlTypes;
 using System.Windows;
 
 namespace OpenDnD.Windows
@@ -9,7 +11,6 @@ namespace OpenDnD.Windows
     public partial class SessionCreationWindow : Window
     {
         public ISessionService SessionService { get; }
-        public IAuthService AuthService { get; }
         public IPlayerService PlayerService { get; }
         public IServiceProvider ServiceProvider { get; }
         public AuthToken AuthToken { get; private set; }
@@ -17,10 +18,9 @@ namespace OpenDnD.Windows
         public Interfaces.Session CurrentSession { get; private set; }
         public List<Interfaces.SessionPlayer> Players { get; private set; }
 
-        public SessionCreationWindow(ISessionService sessionService, IAuthService authService, IServiceProvider serviceProvider, IPlayerService playerService)
+        public SessionCreationWindow(ISessionService sessionService, IServiceProvider serviceProvider, IPlayerService playerService)
         {
             SessionService = sessionService;
-            AuthService = authService;
             PlayerService = playerService;
             ServiceProvider = serviceProvider;
             InitializeComponent();
@@ -47,7 +47,16 @@ namespace OpenDnD.Windows
 
         private void InvitePlayerButton_Click(object sender, RoutedEventArgs e)
         {
+            var siw = ServiceProvider.GetRequiredService<SessionInviterWindow>();
+            siw.SetAuthToken(AuthToken);
+            if (SessionId is null)
+            {
+                SaveSessionButton_Click(sender, e);
+            }
 
+            siw.SetSessionId(SessionId.Value);
+            siw.ShowDialog();
+            RefreshPlayerList();
         }
 
         private void SaveSessionButton_Click(object sender, RoutedEventArgs e)

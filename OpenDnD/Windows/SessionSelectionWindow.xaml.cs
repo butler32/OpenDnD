@@ -22,16 +22,14 @@ namespace OpenDnD.Windows
     public partial class SessionSelectionWindow : Window
     {
         public ISessionService SessionService { get; }
-        public IAuthService AuthService { get; }
         public IServiceProvider ServiceProvider { get; }
         public AuthToken AuthToken { get; private set; }
 
         public List<Session> Sessions { get; private set; }
-        public SessionSelectionWindow(ISessionService sessionService, IAuthService authService, IServiceProvider serviceProvider)
+        public SessionSelectionWindow(ISessionService sessionService, IServiceProvider serviceProvider)
         {
             ServiceProvider = serviceProvider;
             SessionService = sessionService;
-            AuthService = authService;
             InitializeComponent();
         }
 

@@ -28,5 +28,6 @@ namespace OpenDnD.Interfaces
     public interface IPlayerService : ICRUDService<Player, PlayerRequest>
     {
         public List<Player> GetPlayerListFromSession(AuthToken authToken, List<Guid> playerIds);
+        public Player GetPlayerByName(AuthToken authToken, string name);
     }
 }
