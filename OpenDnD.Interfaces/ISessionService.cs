@@ -16,7 +16,7 @@ namespace OpenDnD.Interfaces
     }
     public interface ISessionService : ICRUDService<Session, SessionRequest>
     {
-        public void AddPlayerToSession(AuthToken authToken, Guid sessionId, Guid userId, string playerRole);
+        public void AddPlayerToSession(AuthToken authToken, Guid sessionId, Guid userId, RoleEnum playerRole);
         public void RemovePlayerFromSession(AuthToken authToken, Guid sessionId, Guid userId);
 
         delegate void CurrentSessionMapChanged(SessionMapEntity sessionMapEntity);

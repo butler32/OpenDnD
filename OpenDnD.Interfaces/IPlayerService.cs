@@ -8,6 +8,12 @@ namespace OpenDnD.Interfaces
 {
     public class Player
     {
+        public Player(Guid playerId, string userName)
+        {
+            PlayerId = playerId;
+            UserName = userName;
+        }
+
         public Guid PlayerId { get; set; }
         public string UserName { get; set; }
     }
@@ -21,6 +27,6 @@ namespace OpenDnD.Interfaces
 
     public interface IPlayerService : ICRUDService<Player, PlayerRequest>
     {
-
+        public List<Player> GetPlayerListFromSession(AuthToken authToken, List<Guid> playerIds);
     }
 }

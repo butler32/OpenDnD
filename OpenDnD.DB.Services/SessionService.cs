@@ -17,18 +17,18 @@ namespace OpenDnD.DB.Services
             AuthService = authService;
         }
 
-        public void AddPlayerToSession(AuthToken authToken, Guid sessionId, Guid userId, string playerRole)
+        public void AddPlayerToSession(AuthToken authToken, Guid sessionId, Guid userId, RoleEnum playerRole)
         {
             AuthService.ValidateAuthTokenAndThrowExceptionOnError(authToken);
 
-            if (!OpenDnDContext.SessionPlayers.Any(x => x.PlayerId == authToken.PlayerId && x.SessionId == sessionId && x.PlayerRole == "OWNER"))
+            if (!OpenDnDContext.SessionPlayers.Any(x => x.PlayerId == authToken.PlayerId && x.SessionId == sessionId && x.PlayerRole == (int)RoleEnum.Master))
                 throw new Exception("No acces to this action");
 
             OpenDnDContext.SessionPlayers.Add(new SessionPlayer
             {
                 SessionId = sessionId,
                 PlayerId = userId,
-                PlayerRole = playerRole
+                PlayerRole = (int)playerRole
             });
             OpenDnDContext.SaveChanges();
         }
@@ -37,7 +37,7 @@ namespace OpenDnD.DB.Services
         {
             AuthService.ValidateAuthTokenAndThrowExceptionOnError(authToken);
 
-            if (!OpenDnDContext.SessionPlayers.Any(x => x.PlayerId == authToken.PlayerId && x.SessionId == sessionId && x.PlayerRole == "OWNER"))
+            if (!OpenDnDContext.SessionPlayers.Any(x => x.PlayerId == authToken.PlayerId && x.SessionId == sessionId && x.PlayerRole == (int)RoleEnum.Master))
                 throw new Exception("No acces to this action");
 
             throw new NotImplementedException();
@@ -54,7 +54,7 @@ namespace OpenDnD.DB.Services
                 Players = request.PlayersIds?
                 .Select(p => new SessionPlayer{
                     PlayerId = p,
-                    PlayerRole = "Player"
+                    PlayerRole = (int)RoleEnum.Player
                 }).ToList()
             };
             OpenDnDContext.Sessions.Add(session);
@@ -71,7 +71,7 @@ namespace OpenDnD.DB.Services
                 };
                 OpenDnDContext.SessionPlayers.Add(owner);
             }
-            owner.PlayerRole = "OWNER";
+            owner.PlayerRole = (int)RoleEnum.Master;
             OpenDnDContext.SaveChanges();
 
             return session.SessionId;
@@ -81,7 +81,7 @@ namespace OpenDnD.DB.Services
         {
             AuthService.ValidateAuthTokenAndThrowExceptionOnError(authToken);
 
-            if (!OpenDnDContext.SessionPlayers.Any(x => x.PlayerId == authToken.PlayerId && x.SessionId == id && x.PlayerRole == "OWNER"))
+            if (!OpenDnDContext.SessionPlayers.Any(x => x.PlayerId == authToken.PlayerId && x.SessionId == id && x.PlayerRole == (int)RoleEnum.Master))
                 throw new Exception("No acces to this action");
 
             OpenDnDContext.SessionPlayers
@@ -142,13 +142,12 @@ namespace OpenDnD.DB.Services
             OpenDnDContext.SaveChanges();
         }
 
-        public List<SessionPlayer> GetSessionPlayers(AuthToken authToken, Guid sessionId)
+        public List<Interfaces.SessionPlayer> GetSessionPlayers(AuthToken authToken, Guid sessionId)
         {
             AuthService.ValidateAuthTokenAndThrowExceptionOnError(authToken);
 
             return OpenDnDContext.SessionPlayers
-                .Where(x => x.SessionId == sessionId)
-                .ToList();
+                .Where(x => x.SessionId == sessionId).Select(x => new Interfaces.SessionPlayer(x.PlayerId, x.Player.UserName, (RoleEnum)x.PlayerRole)).ToList();
         }
     }
 }

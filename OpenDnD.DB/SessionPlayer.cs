@@ -11,6 +11,6 @@ namespace OpenDnD.DB
         public Guid PlayerId { get; set; }
         public virtual Player Player { get; set; }
 
-        public string PlayerRole { get; set; }
+        public int PlayerRole { get; set; }
     }
 }
