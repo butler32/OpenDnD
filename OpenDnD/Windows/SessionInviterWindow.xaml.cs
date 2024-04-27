@@ -1,5 +1,4 @@
-﻿using OpenDnD.DB.Services;
-using OpenDnD.Interfaces;
+﻿using OpenDnD.Interfaces;
 using System.Windows;
 
 namespace OpenDnD.Windows
