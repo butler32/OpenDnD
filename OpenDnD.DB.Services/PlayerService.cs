@@ -13,19 +13,17 @@ namespace OpenDnD.DB.Services
         public OpenDnDContext OpenDnDContext { get; }
         public Secret Secret { get; }
         public ApplicationAuthToken ApplicationAuthToken { get; }
-        public IAuthService AuthService { get; }
 
-        public PlayerService(OpenDnDContext openDnDContext, Secret secret, ApplicationAuthToken applicationAuthToken, IAuthService authService)
+        public PlayerService(OpenDnDContext openDnDContext, Secret secret, ApplicationAuthToken applicationAuthToken)
         {
             OpenDnDContext = openDnDContext;
             Secret = secret;
             ApplicationAuthToken = applicationAuthToken;
-            AuthService = authService;
         }
 
         public Guid Create(AuthToken authToken, PlayerRequest request)
         {
-            AuthService.ValidateAuthTokenAndThrowExceptionOnError(authToken);
+            this.ValidateAuthTokenAndThrowExceptionOnError(authToken);
 
             var player = new Player
             {
@@ -41,14 +39,14 @@ namespace OpenDnD.DB.Services
 
         public void Delete(AuthToken authToken, Guid id)
         {
-            AuthService.ValidateAuthTokenAndThrowExceptionOnError(authToken);
+            this.ValidateAuthTokenAndThrowExceptionOnError(authToken);
 
             OpenDnDContext.Players.Where(x => x.PlayerId == id).ExecuteDelete();
         }
 
         public Interfaces.Player Get(AuthToken authToken, Guid id)
         {
-            AuthService.ValidateAuthTokenAndThrowExceptionOnError(authToken);
+            this.ValidateAuthTokenAndThrowExceptionOnError(authToken);
 
             var player = OpenDnDContext.Players.FirstOrDefault(x => x.PlayerId == id);
             return new Interfaces.Player(player.PlayerId, player.UserName);
@@ -56,14 +54,14 @@ namespace OpenDnD.DB.Services
 
         public List<Interfaces.Player> GetList(AuthToken authToken)
         {
-            AuthService.ValidateAuthTokenAndThrowExceptionOnError(authToken);
+            this.ValidateAuthTokenAndThrowExceptionOnError(authToken);
 
             return OpenDnDContext.Players.Select(x => new Interfaces.Player(x.PlayerId, x.UserName)).ToList();
         }
 
         public void Update(AuthToken authToken, Guid id, PlayerRequest request)
         {
-            AuthService.ValidateAuthTokenAndThrowExceptionOnError(authToken);
+            this.ValidateAuthTokenAndThrowExceptionOnError(authToken);
 
             var player = OpenDnDContext.Players.FirstOrDefault(x => x.PlayerId == id);
 
@@ -132,7 +130,7 @@ namespace OpenDnD.DB.Services
 
         public List<Interfaces.Player> GetPlayerListFromSession(AuthToken authToken, List<Guid> P)
         {
-            AuthService.ValidateAuthTokenAndThrowExceptionOnError(authToken);
+            this.ValidateAuthTokenAndThrowExceptionOnError(authToken);
 
             return OpenDnDContext.Players.Where(x => P.Contains(x.PlayerId))
                 .Select(x => new Interfaces.Player(x.PlayerId, x.UserName)).ToList();
@@ -140,7 +138,7 @@ namespace OpenDnD.DB.Services
 
         public Interfaces.Player GetPlayerByName(AuthToken authToken, string name)
         {
-            AuthService.ValidateAuthTokenAndThrowExceptionOnError(authToken);
+            this.ValidateAuthTokenAndThrowExceptionOnError(authToken);
 
             var player = OpenDnDContext.Players.FirstOrDefault(x => x.UserName == name);
 

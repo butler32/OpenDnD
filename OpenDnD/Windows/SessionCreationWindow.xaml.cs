@@ -33,7 +33,7 @@ namespace OpenDnD.Windows
 
         private void RefreshPlayerList()
         {
-            var sessionPlayers = SessionService.GetSessionPlayers(AuthToken, SessionId.Value);
+            Players = SessionService.GetSessionPlayers(AuthToken, SessionId.Value);
 
             PlayersList.ItemsSource = Players;
         }
@@ -42,6 +42,7 @@ namespace OpenDnD.Windows
         {
             SessionId = sessionId;
             CurrentSession = SessionService.Get(AuthToken, SessionId.Value);
+            SessionName.Text = CurrentSession.SessionName;
             RefreshPlayerList();
         }
 
@@ -67,12 +68,28 @@ namespace OpenDnD.Windows
                 {
                     SessionName = SessionName.Text,
                 });
+                CurrentSession = SessionService.Get(AuthToken, SessionId.Value);
+
+                RefreshPlayerList();
             }
             else
             {
+                List<Guid> guids = new List<Guid>();
+
+                if (Players is not null)
+                {
+                    foreach (var player in Players)
+                    {
+                        guids.Add(player.PlayerId);
+                    }
+                }
+                else
+                    guids = null;
+
                 SessionService.Update(AuthToken, CurrentSession.SessionId, new SessionRequest
                 {
                     SessionName = SessionName.Text,
+                    PlayersIds = guids
                 });
             }
         }

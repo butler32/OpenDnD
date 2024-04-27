@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:OpenDnD.Windows"
         mc:Ignorable="d"
-        Title="SessionCreationWindow" Height="450" Width="800">
+        Title="SessionCreationWindow" Height="600" Width="800">
+    
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -15,7 +16,7 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-
+        
         <StackPanel Grid.Row="0">
             <Label FontSize="30">Название</Label>
             <Border  BorderBrush="Black" BorderThickness="2" CornerRadius="5" Padding="5" Margin="5">
@@ -23,16 +24,16 @@
             </Border>
         </StackPanel>
 
-        <TextBlock Grid.Row="1" Text="Игроки" FontSize="30" VerticalAlignment="Center" Margin="5"/>
+        <TextBlock FontSize="30" Grid.Row="1" Text="Игроки" VerticalAlignment="Center" Margin="5"/>
 
         <Border Grid.Row="2" BorderBrush="Black" BorderThickness="2" CornerRadius="5" Padding="5" Margin="5">
             <ListBox Name="PlayersList" Grid.Row="2" FontSize="27">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <StackPanel Orientation="Horizontal">
+                        <Grid>
                             <TextBlock Text="{Binding UserName}" HorizontalAlignment="Left" />
-                            <TextBlock Text="{Binding UserName}" HorizontalAlignment="Center" />
-                        </StackPanel>
+                            <TextBlock Text="{Binding Role}" HorizontalAlignment="Center" />
+                        </Grid>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>

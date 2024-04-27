@@ -67,5 +67,15 @@ namespace OpenDnD.Windows
             scw.ShowDialog();
             Begin();
         }
+
+        private void EditSessionButton_Click(object sender, RoutedEventArgs e)
+        {
+            var currentSession = (Interfaces.Session)SessionsList.SelectedItem;
+            var scw = ServiceProvider.GetRequiredService<SessionCreationWindow>();
+            scw.SetAuthToken(AuthToken);
+            scw.SetSessionId(currentSession.SessionId);
+            scw.ShowDialog();
+            Begin();
+        }
     }
 }

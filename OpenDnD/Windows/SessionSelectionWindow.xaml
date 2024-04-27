@@ -47,7 +47,9 @@
         
         <Button Content="Удалить сессию" Grid.Row="3" Grid.Column="1" Margin="5" FontSize="25" Click="DeleteSessionButton_Click"/>
 
-        <Button Content="Присоединиться к сессии" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" FontSize="25" Margin="5" />
+        <Button Content="Присоединиться" Grid.Row="2" Grid.Column="0" FontSize="25" Margin="5" />
+        
+        <Button Content="Редактировать" Grid.Row="2" Grid.Column="1" FontSize="25" Margin="5" Click="EditSessionButton_Click" />
 
         <Button Content="Создать персонажа" Grid.Row="2" Grid.Column="3" Margin="5" FontSize="25" />
         
