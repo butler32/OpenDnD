@@ -5,41 +5,39 @@ using OpenDnD.DB;
 using OpenDnD.DB.Services;
 using OpenDnD.Interfaces;
 using OpenDnD.Windows;
-using System.Configuration;
-using System.Data;
+using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
+using System.Windows.Shapes;
 
 namespace OpenDnD
 {
     /// <summary>
-    /// Interaction logic for App.xaml
+    /// Interaction logic for Page1.xaml
     /// </summary>
-    public partial class App : Application
+    public partial class Program : Window
     {
-        /*
-        public static IHost Host { get; set; }
-        public void InitializeComponent()
+        public IHost Host { get; set; }
+        public Program()
         {
-            var loginWindow = Host.Services.GetRequiredService<LoginWindow>();
-            loginWindow.Show();
-        }
-        protected override void OnStartup(StartupEventArgs e)
-        {
-            base.OnStartup(e);
-        }
 
-
-        [STAThread]
-        public static void Main()
-        {
             Directory.SetCurrentDirectory(AppDomain.CurrentDomain.BaseDirectory);
             Host = Microsoft.Extensions.Hosting.Host.CreateDefaultBuilder()
                 .ConfigureServices(services =>
                 {
                     services.AddSingleton<App>();
-                    services.AddSingleton<ApplicationAuthToken>(x => 
+                    services.AddSingleton<ApplicationAuthToken>(x =>
                     {
                         var Secret = x.GetRequiredService<Secret>();
                         var token = CryptoService.GetAuthToken(Guid.Empty, Secret.SecretKey);
@@ -60,7 +58,7 @@ namespace OpenDnD
 
                     services.AddSingleton(x =>
                     {
-                        var config = Newtonsoft.Json.JsonConvert.DeserializeObject<Config>(File.ReadAllText("appsettings.json")) 
+                        var config = Newtonsoft.Json.JsonConvert.DeserializeObject<Config>(File.ReadAllText("appsettings.json"))
                             ?? throw new Exception("cannot read appsettings.json file");
                         return config;
                     });
@@ -73,7 +71,7 @@ namespace OpenDnD
 
                     services.AddTransient<IAuthService, PlayerService>();
                     services.AddTransient<ISessionService, SessionService>();
-                    
+
                 })
                 .Build();
 
@@ -83,11 +81,11 @@ namespace OpenDnD
                 context.Database.Migrate();
             }
 
-            var app = Host.Services.GetRequiredService<App>();
+            var loginWindow = Host.Services.GetRequiredService<LoginWindow>();
+            loginWindow.Show();
 
-            app.InitializeComponent();
-            app.Run();
+            this.Close();
+
         }
-        */
     }
 }
