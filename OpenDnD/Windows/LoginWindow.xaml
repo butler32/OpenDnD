@@ -42,7 +42,7 @@
 
         <Button Content="Connect" Grid.Row="3" Margin="20" FontSize="30" Click="ConnectButton_Click"/>
         
-        <Button Content="Смена пароля" FontSize="30" Margin="30 0 0 0" Grid.Row="4" HorizontalAlignment="Left" />
+        <Button Content="Смена пароля" FontSize="30" Margin="30 0 0 0" Grid.Row="4" HorizontalAlignment="Left" Click="NewWindowButton_Click"/>
         
         <Button Grid.Row="4" Content="Регистрация" FontSize="30" Margin="0 0 30 0" HorizontalAlignment="Right" Click="RegisterButton_Click" />
 
