@@ -1,19 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore.Query.Internal;
-using OpenDnD.DB;
+﻿using Microsoft.Extensions.DependencyInjection;
 using OpenDnD.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Data.SqlTypes;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace OpenDnD.Windows
 {
@@ -23,17 +11,17 @@ namespace OpenDnD.Windows
     public partial class SessionCreationWindow : Window
     {
         public ISessionService SessionService { get; }
-        public IAuthService AuthService { get; }
+        public IPlayerService PlayerService { get; }
         public IServiceProvider ServiceProvider { get; }
         public AuthToken AuthToken { get; private set; }
         public Guid? SessionId { get; private set; }
         public Interfaces.Session CurrentSession { get; private set; }
-        public List<SessionPlayer> Players { get; private set; }
+        public List<Interfaces.SessionPlayer> Players { get; private set; }
 
-        public SessionCreationWindow(ISessionService sessionService, IAuthService authService, IServiceProvider serviceProvider)
+        public SessionCreationWindow(ISessionService sessionService, IServiceProvider serviceProvider, IPlayerService playerService)
         {
             SessionService = sessionService;
-            AuthService = authService;
+            PlayerService = playerService;
             ServiceProvider = serviceProvider;
             InitializeComponent();
         }
@@ -43,44 +31,65 @@ namespace OpenDnD.Windows
             AuthToken = authToken;
         }
 
+        private void RefreshPlayerList()
+        {
+            Players = SessionService.GetSessionPlayers(AuthToken, SessionId.Value);
+
+            PlayersList.ItemsSource = Players;
+        }
+
         public void SetSessionId(Guid sessionId)
         {
             SessionId = sessionId;
             CurrentSession = SessionService.Get(AuthToken, SessionId.Value);
-            Players = SessionService.GetSessionPlayers(AuthToken, SessionId.Value);
-            PlayersList.ItemsSource = Players;
+            SessionName.Text = CurrentSession.SessionName;
+            RefreshPlayerList();
         }
-
-        //protected override void OnClosed(EventArgs e)
-        //{
-        //    SessionService.Update(AuthToken, CurrentSession.SessionId, new SessionRequest
-        //    {
-        //        SessionId = CurrentSession.SessionId,
-        //        SessionName = SessionName.Text,
-        //    });
-
-        //    base.OnClosed(e);
-        //}
 
         private void InvitePlayerButton_Click(object sender, RoutedEventArgs e)
         {
+            var siw = ServiceProvider.GetRequiredService<SessionInviterWindow>();
+            siw.SetAuthToken(AuthToken);
+            if (SessionId is null)
+            {
+                SaveSessionButton_Click(sender, e);
+            }
 
+            siw.SetSessionId(SessionId.Value);
+            siw.ShowDialog();
+            RefreshPlayerList();
         }
 
         private void SaveSessionButton_Click(object sender, RoutedEventArgs e)
         {
-            if (SessionId == null) 
+            if (SessionId is null)
             {
                 SessionId = SessionService.Create(AuthToken, new SessionRequest
                 {
                     SessionName = SessionName.Text,
                 });
+                CurrentSession = SessionService.Get(AuthToken, SessionId.Value);
+
+                RefreshPlayerList();
             }
             else
             {
+                List<Guid> guids = new List<Guid>();
+
+                if (Players is not null)
+                {
+                    foreach (var player in Players)
+                    {
+                        guids.Add(player.PlayerId);
+                    }
+                }
+                else
+                    guids = null;
+
                 SessionService.Update(AuthToken, CurrentSession.SessionId, new SessionRequest
                 {
                     SessionName = SessionName.Text,
+                    PlayersIds = guids
                 });
             }
         }

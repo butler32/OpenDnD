@@ -17,18 +17,18 @@ namespace OpenDnD.DB.Services
             AuthService = authService;
         }
 
-        public void AddPlayerToSession(AuthToken authToken, Guid sessionId, Guid userId, string playerRole)
+        public void AddPlayerToSession(AuthToken authToken, Guid sessionId, Guid userId, RoleEnum playerRole)
         {
             AuthService.CheckAuthTokenOrThrowException(authToken);
 
-            if (!OpenDnDContext.SessionPlayers.Any(x => x.PlayerId == authToken.PlayerId && x.SessionId == sessionId && x.PlayerRole == "OWNER"))
+            if (!OpenDnDContext.SessionPlayers.Any(x => x.PlayerId == authToken.PlayerId && x.SessionId == sessionId && x.PlayerRole == (int)RoleEnum.Master))
                 throw new Exception("No acces to this action");
 
             OpenDnDContext.SessionPlayers.Add(new SessionPlayer
             {
                 SessionId = sessionId,
                 PlayerId = userId,
-                PlayerRole = playerRole
+                PlayerRole = (int)playerRole
             });
             OpenDnDContext.SaveChanges();
         }
@@ -37,7 +37,7 @@ namespace OpenDnD.DB.Services
         {
             AuthService.CheckAuthTokenOrThrowException(authToken);
 
-            if (!OpenDnDContext.SessionPlayers.Any(x => x.PlayerId == authToken.PlayerId && x.SessionId == sessionId && x.PlayerRole == "OWNER"))
+            if (!OpenDnDContext.SessionPlayers.Any(x => x.PlayerId == authToken.PlayerId && x.SessionId == sessionId && x.PlayerRole == (int)RoleEnum.Master))
                 throw new Exception("No acces to this action");
 
             throw new NotImplementedException();
@@ -55,7 +55,7 @@ namespace OpenDnD.DB.Services
                 .Select(p => new SessionPlayer
                 {
                     PlayerId = p,
-                    PlayerRole = "Player"
+                    PlayerRole = (int)RoleEnum.Player
                 }).ToList()
             };
             OpenDnDContext.Sessions.Add(session);
@@ -72,7 +72,7 @@ namespace OpenDnD.DB.Services
                 };
                 OpenDnDContext.SessionPlayers.Add(owner);
             }
-            owner.PlayerRole = "OWNER";
+            owner.PlayerRole = (int)RoleEnum.Master;
             OpenDnDContext.SaveChanges();
 
             return session.SessionId;
@@ -82,7 +82,7 @@ namespace OpenDnD.DB.Services
         {
             AuthService.CheckAuthTokenOrThrowException(authToken);
 
-            if (!OpenDnDContext.SessionPlayers.Any(x => x.PlayerId == authToken.PlayerId && x.SessionId == id && x.PlayerRole == "OWNER"))
+            if (!OpenDnDContext.SessionPlayers.Any(x => x.PlayerId == authToken.PlayerId && x.SessionId == id && x.PlayerRole == (int)RoleEnum.Master))
                 throw new Exception("No acces to this action");
 
             OpenDnDContext.SessionPlayers
@@ -143,16 +143,15 @@ namespace OpenDnD.DB.Services
             OpenDnDContext.SaveChanges();
         }
 
-        public List<SessionPlayer> GetSessionPlayers(AuthToken authToken, Guid sessionId)
+        public List<Interfaces.SessionPlayer> GetSessionPlayers(AuthToken authToken, Guid sessionId)
         {
             AuthService.CheckAuthTokenOrThrowException(authToken);
 
             return OpenDnDContext.SessionPlayers
-                .Where(x => x.SessionId == sessionId)
-                .ToList();
+                .Where(x => x.SessionId == sessionId).Select(x => new Interfaces.SessionPlayer(x.PlayerId, x.Player.UserName, (RoleEnum)x.PlayerRole)).ToList();
         }
 
-        public bool CheckPlayerHasMinimusAccess(AuthToken authToken, Guid sessionId, Guid playerId, string role)
+        public bool CheckPlayerHasMinimusAccess(AuthToken authToken, Guid sessionId, Guid playerId, RoleEnum role)
         {
             AuthService.CheckAuthTokenOrThrowException(authToken);
 
@@ -160,9 +159,9 @@ namespace OpenDnD.DB.Services
             
             players = role switch
             {
-                "MASTER" => players.Where(x => x.PlayerRole == "MASTER"),
-                "PLAYER" => players.Where(x => x.PlayerRole == "MASTER" || x.PlayerRole == "PLAYER"),
-                "SPECTATOR" => players.Where(x => x.PlayerRole == "MASTER" || x.PlayerRole == "PLAYER" || x.PlayerRole == "SPECTATOR"),
+                RoleEnum.Master => players.Where(x => x.PlayerRole == (int)RoleEnum.Master),
+                RoleEnum.Player => players.Where(x => x.PlayerRole == (int)RoleEnum.Master || x.PlayerRole == (int)RoleEnum.Player),
+                RoleEnum.Spectator => players.Where(x => x.PlayerRole == (int)RoleEnum.Master || x.PlayerRole == (int)RoleEnum.Player || x.PlayerRole == (int)RoleEnum.Spectator),
                 _ => throw new Exception("Invalid role name")
             };
 

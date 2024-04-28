@@ -72,6 +72,7 @@ namespace OpenDnD
                     }, ServiceLifetime.Transient);
 
                     services.AddTransient<IAuthService, PlayerService>();
+                    services.AddTransient<IPlayerService, PlayerService>();
                     services.AddTransient<ISessionService, SessionService>();
                     
                 })

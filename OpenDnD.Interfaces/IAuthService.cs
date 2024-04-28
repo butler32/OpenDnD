@@ -32,25 +32,7 @@ namespace OpenDnD.Interfaces
                 throw new InvalidAuthenticationTokenException();
         }
     }
-    public class InvalidAuthenticationTokenException : Exception
-    {
-        public const string DefaultMessage = "Invalid Authentication Token";
-        public InvalidAuthenticationTokenException() : base(DefaultMessage)
-        {
-        }
-
-        public InvalidAuthenticationTokenException(string? message) : base(message ?? DefaultMessage)
-        {
-        }
-
-        public InvalidAuthenticationTokenException(string? message, Exception? innerException) : base(message ?? DefaultMessage, innerException)
-        {
-        }
-
-        protected InvalidAuthenticationTokenException(SerializationInfo info, StreamingContext context) : base(info, context)
-        {
-        }
-    }
+    
 
     public class CryptoPoolPolicy : PooledObjectPolicy<SHA512>
     {
@@ -66,6 +48,9 @@ namespace OpenDnD.Interfaces
             => GetSHA512(Encoding.UTF8.GetString(playerId.ToByteArray()) + secretValue);
         public static bool ValidateAuthToken(AuthToken authToken, string secretValue)
             => GetSHA512(Encoding.UTF8.GetString(authToken.PlayerId.ToByteArray()) + secretValue) == authToken.TokenValue;
+        //public static bool ValidateAuthToken(AuthToken authToken, string secretValue)
+        //    => true;
+
         public static (string hash, string salt) GetHashSaltPair(string password)
         {
             var salt = GetRandonString();
