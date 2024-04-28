@@ -55,5 +55,12 @@ namespace OpenDnD.Windows
                 MessageBox.Show(ex.Message);
             }
         }
+
+        private void NewWindowButton_Click(object sender, RoutedEventArgs e)
+        {
+            var lrw = new LoginRegisterWindow();
+            lrw.Show();
+            this.Close();
+        }
     }
 }
