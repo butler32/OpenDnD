@@ -14,6 +14,11 @@ namespace OpenDnD.Interfaces
     {
         public Guid SessionId { get; set; }
         public string SessionName { get; set; }
+        public Session(Guid sessionId, string sessionName)
+        {
+            SessionId = sessionId;
+            SessionName = sessionName;
+        }
     }
     public interface ISessionService : ICRUDService<Session, SessionRequest>
     {

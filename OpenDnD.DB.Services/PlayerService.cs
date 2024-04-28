@@ -49,6 +49,9 @@ namespace OpenDnD.DB.Services
             this.CheckAuthTokenOrThrowException(authToken);
 
             var player = OpenDnDContext.Players.FirstOrDefault(x => x.PlayerId == id);
+            if (player is null)
+                throw new NoEntryWithRequiredIdException<Player>(id);
+
             return new Interfaces.Player(player.PlayerId, player.UserName);
         }
 
@@ -66,9 +69,7 @@ namespace OpenDnD.DB.Services
             var player = OpenDnDContext.Players.FirstOrDefault(x => x.PlayerId == id);
 
             if (player is null)
-            {
-                throw new Exception("Player not found");
-            }
+                throw new NoEntryWithRequiredIdException<Player>(id);
 
             if (request.UserName is not null)
             {

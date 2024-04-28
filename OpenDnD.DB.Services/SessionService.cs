@@ -20,9 +20,7 @@ namespace OpenDnD.DB.Services
         public void AddPlayerToSession(AuthToken authToken, Guid sessionId, Guid userId, RoleEnum playerRole)
         {
             AuthService.CheckAuthTokenOrThrowException(authToken);
-
-            if (!OpenDnDContext.SessionPlayers.Any(x => x.PlayerId == authToken.PlayerId && x.SessionId == sessionId && x.PlayerRole == (int)RoleEnum.Master))
-                throw new Exception("No acces to this action");
+            this.CheckPlayerHasMinimusAccessOrThrowException(authToken, sessionId, authToken.PlayerId, RoleEnum.Master);
 
             OpenDnDContext.SessionPlayers.Add(new SessionPlayer
             {
@@ -36,9 +34,7 @@ namespace OpenDnD.DB.Services
         public void ChangeCurrentSessionMap(AuthToken authToken, Guid sessionId, Guid sessionMapId)
         {
             AuthService.CheckAuthTokenOrThrowException(authToken);
-
-            if (!OpenDnDContext.SessionPlayers.Any(x => x.PlayerId == authToken.PlayerId && x.SessionId == sessionId && x.PlayerRole == (int)RoleEnum.Master))
-                throw new Exception("No acces to this action");
+            this.CheckPlayerHasMinimusAccessOrThrowException(authToken, sessionId, authToken.PlayerId, RoleEnum.Master);
 
             throw new NotImplementedException();
         }
@@ -81,9 +77,7 @@ namespace OpenDnD.DB.Services
         public void Delete(AuthToken authToken, Guid id)
         {
             AuthService.CheckAuthTokenOrThrowException(authToken);
-
-            if (!OpenDnDContext.SessionPlayers.Any(x => x.PlayerId == authToken.PlayerId && x.SessionId == id && x.PlayerRole == (int)RoleEnum.Master))
-                throw new Exception("No acces to this action");
+            this.CheckPlayerHasMinimusAccessOrThrowException(authToken, id, authToken.PlayerId, RoleEnum.Master);
 
             OpenDnDContext.SessionPlayers
                 .Where(x => x.SessionId == id)
@@ -98,15 +92,13 @@ namespace OpenDnD.DB.Services
         {
             AuthService.CheckAuthTokenOrThrowException(authToken);
 
-            if (!OpenDnDContext.SessionPlayers.Any(x => x.PlayerId == authToken.PlayerId && x.SessionId == id))
-                throw new Exception("No acces to this action");
-
             var session = OpenDnDContext.Sessions.FirstOrDefault(x => x.SessionId == id);
-            return new Interfaces.Session
-            {
-                SessionId = session.SessionId,
-                SessionName = session.SessionName
-            };
+            if (session is null)
+                throw new NoEntryWithRequiredIdException<Session>(id);
+
+            this.CheckPlayerHasMinimusAccessOrThrowException(authToken, id, authToken.PlayerId, RoleEnum.Spectator);
+            
+            return new Interfaces.Session(session.SessionId, session.SessionName);
         }
 
         public List<Interfaces.Session> GetList(AuthToken authToken)
@@ -115,11 +107,7 @@ namespace OpenDnD.DB.Services
 
             return OpenDnDContext.Sessions
                 .Where(x => x.Players.Any(y => y.PlayerId == authToken.PlayerId))
-                .Select(x => new Interfaces.Session
-                {
-                    SessionId = x.SessionId,
-                    SessionName = x.SessionName
-                })
+                .Select(x => new Interfaces.Session(x.SessionId, x.SessionName))
                 .ToList();
         }
 
