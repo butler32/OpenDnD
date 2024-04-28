@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.ObjectPool;
 using System.Buffers;
 using System.Net.Sockets;
+using System.Runtime.Serialization;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.Unicode;
@@ -25,10 +26,29 @@ namespace OpenDnD.Interfaces
     }
     public static class IAuthServiceExt
     {
-        public static void ValidateAuthTokenAndThrowExceptionOnError(this IAuthService authService, AuthToken authToken)
+        public static void CheckAuthTokenOrThrowException(this IAuthService authService, AuthToken authToken)
         {
             if (!authService.ValidateAuthToken(authToken))
-                throw new Exception("Invalid Authentication Token");
+                throw new InvalidAuthenticationTokenException();
+        }
+    }
+    public class InvalidAuthenticationTokenException : Exception
+    {
+        public const string DefaultMessage = "Invalid Authentication Token";
+        public InvalidAuthenticationTokenException() : base(DefaultMessage)
+        {
+        }
+
+        public InvalidAuthenticationTokenException(string? message) : base(message ?? DefaultMessage)
+        {
+        }
+
+        public InvalidAuthenticationTokenException(string? message, Exception? innerException) : base(message ?? DefaultMessage, innerException)
+        {
+        }
+
+        protected InvalidAuthenticationTokenException(SerializationInfo info, StreamingContext context) : base(info, context)
+        {
         }
     }
 

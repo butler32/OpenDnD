@@ -23,6 +23,7 @@ namespace OpenDnD.DB
         public DbSet<SessionMap> SessionMaps { get; set; }
         public DbSet<SessionMapEntity> SessionMapEntities { get; set; }
         public DbSet<Entity> Entities { get; set; }
+        public DbSet<SessionChatMessage> SessionChatMessages { get; set; }
 
         public OpenDnDContext(DbContextOptions<OpenDnDContext> options) : base(options) { }
     }

@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using OpenDnD.DB;
 
@@ -10,9 +11,11 @@ using OpenDnD.DB;
 namespace OpenDnD.DB.Migrations
 {
     [DbContext(typeof(OpenDnDContext))]
-    partial class OpenDnDContextModelSnapshot : ModelSnapshot
+    [Migration("20240426205644_add-session-char-messages")]
+    partial class addsessioncharmessages
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.18");
@@ -94,8 +97,6 @@ namespace OpenDnD.DB.Migrations
 
                     b.HasKey("PlayerCharacterId");
 
-                    b.HasIndex("PlayerId");
-
                     b.ToTable("PlayerCharacters");
                 });
 
@@ -131,10 +132,6 @@ namespace OpenDnD.DB.Migrations
                         .HasColumnType("TEXT");
 
                     b.HasKey("SessionChatMessageId");
-
-                    b.HasIndex("PlayerId");
-
-                    b.HasIndex("SessionId");
 
                     b.ToTable("SessionChatMessages");
                 });
@@ -222,36 +219,6 @@ namespace OpenDnD.DB.Migrations
                         .IsRequired();
 
                     b.Navigation("Image");
-                });
-
-            modelBuilder.Entity("OpenDnD.DB.PlayerCharacters", b =>
-                {
-                    b.HasOne("OpenDnD.DB.Player", "Player")
-                        .WithMany()
-                        .HasForeignKey("PlayerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Player");
-                });
-
-            modelBuilder.Entity("OpenDnD.DB.SessionChatMessage", b =>
-                {
-                    b.HasOne("OpenDnD.DB.Player", "Player")
-                        .WithMany()
-                        .HasForeignKey("PlayerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("OpenDnD.DB.Session", "Session")
-                        .WithMany()
-                        .HasForeignKey("SessionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Player");
-
-                    b.Navigation("Session");
                 });
 
             modelBuilder.Entity("OpenDnD.DB.SessionMap", b =>

@@ -11,7 +11,10 @@ namespace OpenDnD.DB
     {
         [Key]
         public Guid PlayerCharacterId { get; set; }
+
         public Guid PlayerId { get; set; }
+        public virtual Player Player { get; set; }
+
         public string PlayerCharacterName { get; set; }
 
     }
