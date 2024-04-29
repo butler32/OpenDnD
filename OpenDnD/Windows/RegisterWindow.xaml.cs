@@ -1,18 +1,16 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using OpenDnD.Interfaces;
-using System.Net;
-using System.Reflection.Emit;
 using System.Windows;
 using System.Windows.Input;
 
 namespace OpenDnD.Windows
 {
     /// <summary>
-    /// Interaction logic for LoginWindow.xaml
+    /// Interaction logic for RegisterWindow.xaml
     /// </summary>
-    public partial class LoginWindow : Window
+    public partial class RegisterWindow : Window
     {
-        public LoginWindow(IServiceProvider serviceProvider, IAuthService authService)
+        public RegisterWindow(IServiceProvider serviceProvider, IAuthService authService)
         {
             InitializeComponent();
             ServiceProvider = serviceProvider;
@@ -63,25 +61,29 @@ namespace OpenDnD.Windows
             this.WindowState = WindowState.Minimized;
         }
 
-        private void RegisterButton_Click(object sender, RoutedEventArgs e)
+        private void BackButton_Click(object sender, RoutedEventArgs e)
         {
-            var registerWindow = ServiceProvider.GetRequiredService<RegisterWindow>();
-            registerWindow.Left = this.Left;
-            registerWindow.Top = this.Top;
-            registerWindow.Width = this.Width;
-            registerWindow.Height = this.Height;
-            registerWindow.Show();
-
+            var loginWindow = ServiceProvider.GetRequiredService<LoginWindow>();
+            loginWindow.Top = this.Top;
+            loginWindow.Left = this.Left;
+            loginWindow.Width = this.Width;
+            loginWindow.Height = this.Height;
+            loginWindow.Show();
             this.Close();
         }
 
-        private void LoginButton_Click(object sender, RoutedEventArgs e)
+        private void RegisterButton_Click(object sender, RoutedEventArgs e)
         {
             InfoLabel.Visibility = Visibility.Hidden;
-            AuthToken authToken;
-            try 
+            try
             {
-                authToken = AuthService.Authenticate(new Uri("http://localhost:222"), loginEnter.Text, passwordEnter.Text);
+                var authToken = AuthService.Register(new Uri("http://localhost:222"), loginEnter.Text, passwordEnter.Text);
+                var ssw = ServiceProvider.GetRequiredService<SessionSelectionWindow>();
+                this.Close();
+
+                ssw.SetAuthToken(authToken);
+                ssw.Show();
+                ssw.Begin();
             }
             catch (Exception ex)
             {
@@ -89,12 +91,6 @@ namespace OpenDnD.Windows
                 InfoLabel.Visibility = Visibility.Visible;
                 return;
             }
-            var ssw = ServiceProvider.GetRequiredService<SessionSelectionWindow>();
-            this.Close();
-
-            ssw.SetAuthToken(authToken);
-            ssw.Show();
-            ssw.Begin();
         }
     }
 }

@@ -1,0 +1,50 @@
+﻿<Window x:Class="OpenDnD.Windows.LoginWindowOld"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:OpenDnD.Windows"
+        mc:Ignorable="d"
+        Title="LoginWindow" Height="700" Width="500">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="2*" />
+            <RowDefinition Height="*" />
+            
+        </Grid.RowDefinitions>
+
+        <StackPanel Margin="20">
+            <Label FontSize="30">Address</Label>
+
+            <Border Grid.Row="0" BorderBrush="Black" BorderThickness="2" CornerRadius="5" Padding="5" >
+                <TextBox Name="Address" Text="http://localhost:222" VerticalAlignment="Center" FontSize="30" BorderBrush="Transparent" />
+            </Border>
+        </StackPanel>
+
+        <StackPanel Margin="20" Grid.Row="1">
+            <Label FontSize="30">Login</Label>
+            
+            <Border Grid.Row="1" BorderBrush="Black" BorderThickness="2" CornerRadius="5" Padding="5">
+                <TextBox Text="butler" Name="UserName"  VerticalAlignment="Center" FontSize="30" BorderBrush="Transparent" />
+            </Border>
+        </StackPanel>
+
+        <StackPanel Margin="20" Grid.Row="2">
+            <Label FontSize="30">Password</Label>
+
+            <Border Grid.Row="2" BorderBrush="Black" BorderThickness="2" CornerRadius="5" Padding="5">
+                <TextBox Text="123" Name="Password" VerticalAlignment="Center" FontSize="30" BorderBrush="Transparent" />
+            </Border>
+        </StackPanel>
+
+        <Button Content="Connect" Grid.Row="3" Margin="20" FontSize="30" Click="ConnectButton_Click"/>
+        
+        <Button Content="Смена пароля" FontSize="30" Margin="30 0 0 0" Grid.Row="4" HorizontalAlignment="Left" Click="NewWindowButton_Click"/>
+        
+        <Button Grid.Row="4" Content="Регистрация" FontSize="30" Margin="0 0 30 0" HorizontalAlignment="Right" Click="RegisterButton_Click" />
+
+    </Grid>
+</Window>

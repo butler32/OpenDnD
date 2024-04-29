@@ -37,7 +37,9 @@ namespace OpenDnD
                             }
                         };
                     });
+                    services.AddTransient<LoginWindowOld>();
                     services.AddTransient<LoginWindow>();
+                    services.AddTransient<RegisterWindow>();
                     services.AddTransient<SessionSelectionWindow>();
                     services.AddTransient<SessionCreationWindow>();
                     services.AddTransient<SessionInviterWindow>();
@@ -70,6 +72,8 @@ namespace OpenDnD
             }
 
             var loginWindow = Host.Services.GetRequiredService<LoginWindow>();
+            loginWindow.Top = (SystemParameters.PrimaryScreenHeight - loginWindow.Height) / 2;
+            loginWindow.Left = (SystemParameters.PrimaryScreenWidth - loginWindow.Width) / 2;
             loginWindow.Show();
 
             this.Close();
