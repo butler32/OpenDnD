@@ -37,7 +37,7 @@ namespace OpenDnD
                             }
                         };
                     });
-                    services.AddTransient<LoginWindowOld>();
+                    
                     services.AddTransient<LoginWindow>();
                     services.AddTransient<RegisterWindow>();
                     services.AddTransient<SessionSelectionWindow>();
