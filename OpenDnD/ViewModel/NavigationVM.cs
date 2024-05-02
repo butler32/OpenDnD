@@ -14,13 +14,6 @@ namespace OpenDnD.ViewModel
             set { _currentView = value; OnPropertyChanged(); }
         }
 
-        public AuthToken AuthToken { get; private set; }
-
-        public void SetAuthToken(AuthToken authToken)
-        {
-            AuthToken = authToken;
-        }
-
         public ICommand SessionsCommand { get; set; }
         public ICommand SessionCreationCommand { get; set; }
         public ICommand CharactersCommand { get; set; }
@@ -28,14 +21,10 @@ namespace OpenDnD.ViewModel
         public ICommand EntitiesCommand { get; set; }
         public ICommand LogoutCommand { get; set; }
         public IServiceProvider ServiceProvider { get; }
+        public UserAuthToken UserAuthToken { get; }
         public Action Close { get; set; }
 
-        private void Sessions(object? obj)
-        {
-            var sessionVM = ServiceProvider.GetRequiredService<SessionsVM>();
-            sessionVM.SetAuthToken(new AuthToken());
-            CurrentView = sessionVM;
-        }
+        private void Sessions(object? obj) => CurrentView = ServiceProvider.GetRequiredService<SessionsVM>();
         private void SessionCreation(object obj) => CurrentView = new SessionCreationVM();
         private void Characters(object obj) => CurrentView = new CharactersVM();
         private void CharacterList(object obj) => CurrentView = new CharacterListVM();
@@ -56,7 +45,7 @@ namespace OpenDnD.ViewModel
             return true;
         }
 
-        public NavigationVM(IServiceProvider serviceProvider)
+        public NavigationVM(IServiceProvider serviceProvider, UserAuthToken userAuthToken)
         {
             SessionsCommand = new RelayCommand(Sessions);
             SessionCreationCommand = new RelayCommand(SessionCreation);
@@ -66,7 +55,8 @@ namespace OpenDnD.ViewModel
             LogoutCommand = new RelayCommand(Logout);
 
             ServiceProvider = serviceProvider;
-            Sessions(null);
+            UserAuthToken = userAuthToken;
+            SessionsCommand.Execute(null);
         }
     }
 }

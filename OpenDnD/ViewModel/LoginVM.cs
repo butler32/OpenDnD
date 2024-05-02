@@ -37,6 +37,7 @@ namespace OpenDnD.ViewModel
 
         public IServiceProvider ServiceProvider { get; }
         public IAuthService AuthService { get; }
+        public UserAuthToken UserAuthToken { get; }
         public ICommand LoginCommand { get; set; }
         public ICommand RegistrationCommand { get; set; }
 
@@ -45,6 +46,8 @@ namespace OpenDnD.ViewModel
             try
             {
                 var token = AuthService.Authenticate(new Uri("http://localhost:222"), UserName, Password);
+
+                this.UserAuthToken.AuthToken = token;
 
                 var mainWindow = ServiceProvider.GetRequiredService<MainWindow>();
                 mainWindow.Show();
@@ -62,6 +65,8 @@ namespace OpenDnD.ViewModel
             {
                 var token = AuthService.Register(new Uri("http://localhost:222"), UserName, Password);
 
+                this.UserAuthToken.AuthToken = token;
+
                 var mainWindow = ServiceProvider.GetRequiredService<MainWindow>();
                 mainWindow.Show();
                 CloseWindow();
@@ -77,11 +82,11 @@ namespace OpenDnD.ViewModel
             return true;
         }
 
-        public LoginVM(IServiceProvider serviceProvider, IAuthService authService)
+        public LoginVM(IServiceProvider serviceProvider, IAuthService authService, UserAuthToken userAuthToken)
         {
             ServiceProvider = serviceProvider;
             AuthService = authService;
-
+            UserAuthToken = userAuthToken;
             LoginCommand = new RelayCommand(Login);
         }
     }

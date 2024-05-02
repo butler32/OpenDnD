@@ -4,6 +4,7 @@ using Microsoft.Extensions.Hosting;
 using OpenDnD.DB;
 using OpenDnD.DB.Services;
 using OpenDnD.Interfaces;
+using OpenDnD.Utilities;
 using OpenDnD.ViewModel;
 using OpenDnD.Windows;
 using System.IO;
@@ -43,6 +44,7 @@ namespace OpenDnD
                     {
                         DataContext = s.GetRequiredService<NavigationVM>()
                     });
+                    services.AddSingleton<UserAuthToken>();
                     services.AddTransient<NavigationVM>();
                     services.AddTransient<LoginWindow>();
                     services.AddTransient<View.Login>(s => new View.Login()
