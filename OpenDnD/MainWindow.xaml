@@ -1,0 +1,154 @@
+﻿<Window x:Class="OpenDnD.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="clr-namespace:OpenDnD.ViewModel"
+        xmlns:Menu="clr-namespace:OpenDnD.Utilities"
+        xmlns:Icon="http://metro.mahapps.com/winfx/xaml/iconpacks"
+        xmlns:local="clr-namespace:OpenDnD" 
+        xmlns:util="clr-namespace:OpenDnD.Utilities" 
+        util:WindowCloser.EnableWindowClosing="True"
+        d:DataContext="{d:DesignInstance Type=vm:NavigationVM}"
+        mc:Ignorable="d"
+        Title="MainWindow" 
+        Height="720" 
+        Width="1280"
+        AllowsTransparency="True"
+        WindowStartupLocation="CenterScreen"
+        WindowStyle="None"
+        Background="Transparent">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <Border Grid.Row="0" Style="{StaticResource TopWindowPanel}"
+        MouseDown="Border_MouseDown" MouseLeftButtonDown="Border_MouseLeftButtonDown" />
+
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button Grid.Row="0" Style="{StaticResource LoginWindowTopButton}" Click="MinimizeButton_Click">
+                <Icon:PackIconMaterial Kind="WindowMinimize" Style="{StaticResource LoginWindowTopButtonIcon}" />
+            </Button>
+
+            <Button Grid.Row="0" Style="{StaticResource LoginWindowCloseButton}" Click="CloseButton_Click">
+                <Icon:PackIconMaterial Kind="Close" Style="{StaticResource LoginWindowTopButtonIcon}" />
+            </Button>
+        </StackPanel>
+
+        <Grid Grid.Row="1">
+
+            <Border Background="#212529"
+            CornerRadius="0 0 20 20" />
+
+            <!-- Base Grid -->
+
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="228" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <!-- Navigation Panel -->
+
+                <Grid HorizontalAlignment="Left">
+
+                    <Border Background="#272B2F"
+                    CornerRadius="20,0,0,20" />
+
+                    <StackPanel>
+
+                        <!-- Sessions -->
+
+                        <Menu:Btn Style="{StaticResource BtnStyle}"
+                                  Command="{Binding SessionsCommand}"
+                                  Visibility="Hidden">
+
+                            <Grid>
+
+                                <TextBlock Style="{StaticResource Text_Style}" Text="Назад" />
+
+                            </Grid>
+
+                        </Menu:Btn>
+
+                        <!-- Sessions -->
+
+                        <Menu:Btn Style="{StaticResource BtnStyle}"
+                                  Command="{Binding SessionsCommand}"
+                                  IsChecked="True">
+
+                            <Grid>
+
+                                <Icon:PackIconMaterial Kind="Animation" Style="{StaticResource LeftMenuButtons}"/>
+                                <TextBlock Style="{StaticResource Text_Style}" Text="Сессии" />
+
+                            </Grid>
+
+                        </Menu:Btn>
+
+                        <!-- Characters -->
+
+                        <Menu:Btn Style="{StaticResource BtnStyle}"
+                                  Command="{Binding CharactersCommand}">
+
+                            <Grid>
+
+                                <Icon:PackIconMaterial Kind="AccountMultiple" Style="{StaticResource LeftMenuButtons}"/>
+                                <TextBlock Style="{StaticResource Text_Style}" Text="Персонажи" />
+
+                            </Grid>
+
+                        </Menu:Btn>
+
+                        <!-- Entities -->
+
+                        <Menu:Btn Style="{StaticResource BtnStyle}"
+                                  Command="{Binding EntitiesCommand}">
+
+                            <Grid>
+
+                                <Icon:PackIconMaterial Kind="AccountGroup" Style="{StaticResource LeftMenuButtons}"/>
+                                <TextBlock Style="{StaticResource Text_Style}" Text="Существа" />
+
+                            </Grid>
+
+                        </Menu:Btn>
+
+                    </StackPanel>
+
+                    <StackPanel VerticalAlignment="Bottom" Margin="0 0 0 10">
+
+                        <Menu:Btn Style="{StaticResource BtnStyle}"
+                                  Command="{Binding LogoutCommand}">
+
+                            <Grid>
+
+                                <Icon:PackIconMaterial Kind="Logout" Style="{StaticResource LeftMenuButtons}"/>
+                                <TextBlock Style="{StaticResource Text_Style}" Text="Logout" />
+
+                            </Grid>
+
+                        </Menu:Btn>
+
+                    </StackPanel>
+
+                </Grid>
+
+                <Grid Grid.Column="1">
+
+                    <ContentControl x:Name="Pages" Content="{Binding CurrentView}" />
+
+                </Grid>
+
+            </Grid>
+
+        </Grid>
+
+    </Grid>
+    
+    
+    
+</Window>

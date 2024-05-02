@@ -79,9 +79,9 @@ namespace OpenDnD.Windows
         {
             InfoLabel.Visibility = Visibility.Hidden;
             AuthToken authToken;
-            try 
+            try
             {
-                authToken = AuthService.Authenticate(new Uri("http://localhost:222"), loginEnter.Text, passwordEnter.Text);
+                authToken = AuthService.Authenticate(new Uri("http://localhost:222"), loginEnter.Text, passwordEnter.Password);
             }
             catch (Exception ex)
             {

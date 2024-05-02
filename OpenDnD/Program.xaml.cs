@@ -4,6 +4,7 @@ using Microsoft.Extensions.Hosting;
 using OpenDnD.DB;
 using OpenDnD.DB.Services;
 using OpenDnD.Interfaces;
+using OpenDnD.ViewModel;
 using OpenDnD.Windows;
 using System.IO;
 using System.Windows;
@@ -38,7 +39,25 @@ namespace OpenDnD
                         };
                     });
                     
+                    services.AddTransient<MainWindow>(s => new MainWindow
+                    {
+                        DataContext = s.GetRequiredService<NavigationVM>()
+                    });
+                    services.AddTransient<NavigationVM>();
                     services.AddTransient<LoginWindow>();
+                    services.AddTransient<View.Login>(s => new View.Login()
+                    {
+                        DataContext = s.GetRequiredService<LoginVM>()
+                    });
+                    services.AddTransient<LoginVM>();
+                    services.AddTransient<LoginRegisterWindow>(s => new LoginRegisterWindow
+                    {
+                        DataContext = s.GetRequiredService<LoginVM>()
+                    });
+
+
+                    services.AddTransient<LoginNavigationVM>();
+                    services.AddTransient<SessionsVM>();
                     services.AddTransient<RegisterWindow>();
                     services.AddTransient<SessionSelectionWindow>();
                     services.AddTransient<SessionCreationWindow>();
@@ -71,10 +90,16 @@ namespace OpenDnD
                 context.Database.Migrate();
             }
 
-            var loginWindow = Host.Services.GetRequiredService<LoginWindow>();
-            loginWindow.Top = (SystemParameters.PrimaryScreenHeight - loginWindow.Height) / 2;
-            loginWindow.Left = (SystemParameters.PrimaryScreenWidth - loginWindow.Width) / 2;
-            loginWindow.Show();
+            //var loginWindow = Host.Services.GetRequiredService<LoginWindow>();
+            //loginWindow.Top = (SystemParameters.PrimaryScreenHeight - loginWindow.Height) / 2;
+            //loginWindow.Left = (SystemParameters.PrimaryScreenWidth - loginWindow.Width) / 2;
+            //loginWindow.Show();
+
+            //var mainWindow = Host.Services.GetRequiredService<MainWindow>();
+            //mainWindow.Show();
+
+            var loginRegWindow = Host.Services.GetRequiredService<LoginRegisterWindow>();
+            loginRegWindow.Show();
 
             this.Close();
 
