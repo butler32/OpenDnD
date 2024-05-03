@@ -167,5 +167,19 @@ namespace OpenDnD.DB.Services
 
             return players.Any(x => x.SessionId == sessionId && x.PlayerId == playerId);
         }
+
+        public List<Interfaces.Session> GetSessionsByIds(AuthToken authToken, List<Guid> sessionId)
+        {
+            AuthService.CheckAuthTokenOrThrowException(authToken);
+
+            return OpenDnDContext.Sessions
+                           .Where(x => sessionId.Contains(x.SessionId))
+                           .Select(x => new Interfaces.Session
+                           {
+                               SessionId = x.SessionId,
+                               SessionName = x.SessionName
+                           })
+                           .ToList();
+        }
     }
 }

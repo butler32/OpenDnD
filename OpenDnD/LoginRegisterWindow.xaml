@@ -13,11 +13,6 @@
         WindowStyle="None" AllowsTransparency="True" WindowStartupLocation="CenterScreen">
 
 
-
-    <Window.Resources>
-        <BooleanToVisibilityConverter x:Key="BoolToVis"/>
-    </Window.Resources>
-
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -31,17 +26,17 @@
         <Border Grid.Row="0" Style="{StaticResource TopWindowPanel}"
                 MouseDown="Border_MouseDown" MouseLeftButtonDown="Border_MouseLeftButtonDown" />
 
-        <Button Grid.Row="0" Style="{StaticResource LoginWindowTopButton}" HorizontalAlignment="Left">
-            <Icon:PackIconMaterial Kind="Cog" Style="{StaticResource LoginWindowTopButtonIcon}" />
+        <Button Grid.Row="0" Style="{StaticResource WindowTopButton}" HorizontalAlignment="Left">
+            <Icon:PackIconMaterial Kind="Cog" Style="{StaticResource WindowTopButtonIcon}" />
         </Button>
 
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-            <Button Grid.Row="0" Style="{StaticResource LoginWindowTopButton}" Click="MinimizeButton_Click">
-                <Icon:PackIconMaterial Kind="WindowMinimize" Style="{StaticResource LoginWindowTopButtonIcon}" />
+            <Button Grid.Row="0" Style="{StaticResource WindowTopButton}" Click="MinimizeButton_Click">
+                <Icon:PackIconMaterial Kind="WindowMinimize" Style="{StaticResource WindowTopButtonIcon}" />
             </Button>
 
-            <Button Grid.Row="0" Style="{StaticResource LoginWindowCloseButton}" Click="CloseButton_Click">
-                <Icon:PackIconMaterial Kind="Close" Style="{StaticResource LoginWindowTopButtonIcon}" />
+            <Button Grid.Row="0" Style="{StaticResource WindowCloseTopButton}" Click="CloseButton_Click">
+                <Icon:PackIconMaterial Kind="Close" Style="{StaticResource WindowTopButtonIcon}" />
             </Button>
         </StackPanel>
 

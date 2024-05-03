@@ -2,7 +2,9 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
 
-    <Style x:Key="LoginWindowTopButton" TargetType="Button">
+    <!--#region Top Panel Buttons-->
+    
+    <Style x:Key="WindowTopButton" TargetType="Button">
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="Foreground" Value="#48494a" />
         <Setter Property="Width" Value="37" />
@@ -31,7 +33,7 @@
         </Style.Triggers>
     </Style>
 
-    <Style x:Key="LoginWindowCloseButton" TargetType="Button">
+    <Style x:Key="WindowCloseTopButton" TargetType="Button">
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="Foreground" Value="#48494a" />
         <Setter Property="Width" Value="37" />
@@ -60,7 +62,11 @@
             </Trigger>
         </Style.Triggers>
     </Style>
+    
+    <!--#endregion-->
 
+    <!--#region Login/Register Buttons-->
+    
     <Style x:Key="LoginButton" TargetType="Button">
         <Setter Property="Background" Value="#FF131E" />
         <Setter Property="Foreground" Value="#FFFFFF" />
@@ -113,6 +119,16 @@
             </Trigger>
         </Style.Triggers>
     </Style>
+    
+    <!--#endregion-->
+
+    <Style x:Key="SessionCardButtons" TargetType="Button">
+        <Setter Property="Height" Value="60"/>
+        <Setter Property="Width" Value="60"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="BorderBrush" Value="Transparent"/>
+        <Setter Property="BorderThickness" Value="0"/>
+    </Style>
 
     <Style x:Key="BtnStyle" TargetType="RadioButton">
 
@@ -127,11 +143,12 @@
                     <Border x:Name="border"
                             Height="50"
                             Width="228"
-                            BorderThickness="0">
+                            BorderThickness="0"
+                            CornerRadius="0 0 0 10">
 
                         <Border.Background>
                             <SolidColorBrush x:Name="BorderBackground"
-                                             Color="#272B2F" />
+                                             Color="#CF843C" />
                         </Border.Background>
 
                         <Grid>
@@ -169,8 +186,8 @@
                                 <Storyboard>
                                     <ColorAnimation Storyboard.TargetName="BorderBackground"
                                                     Storyboard.TargetProperty="Color"
-                                                    From="#272B2F"
-                                                    To="#3E434A"
+                                                    From="#CF843C"
+                                                    To="#a3662c"
                                                     Duration="0:0:0.3" />
                                 </Storyboard>
                             </BeginStoryboard>
@@ -184,8 +201,8 @@
                                 <Storyboard>
                                     <ColorAnimation Storyboard.TargetName="BorderBackground"
                                                     Storyboard.TargetProperty="Color"
-                                                    From="#3E434A"
-                                                    To="#272B2F"
+                                                    From="#a3662c"
+                                                    To="#CF843C"
                                                     Duration="0:0:0.3" />
                                 </Storyboard>
                             </BeginStoryboard>
@@ -197,7 +214,7 @@
 
                             <Setter Property="Background"
                                     TargetName="border"
-                                    Value="#212529" />
+                                    Value="#a3662c" />
 
                             <Setter Property="Visibility"
                                     TargetName="Indicator"

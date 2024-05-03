@@ -26,6 +26,10 @@ namespace OpenDnD
                 .ConfigureServices(services =>
                 {
                     services.AddSingleton<App>();
+
+                    // Add AuthTokens
+
+                    services.AddSingleton<UserAuthToken>();
                     services.AddSingleton<ApplicationAuthToken>(x =>
                     {
                         var Secret = x.GetRequiredService<Secret>();
@@ -39,31 +43,37 @@ namespace OpenDnD
                             }
                         };
                     });
-                    
+
+                    // Add ViewModels
+
+                    services.AddTransient<NavigationVM>();
+                    services.AddTransient<SessionsVM>();
+                    services.AddTransient<SessionCreationVM>();
+                    services.AddTransient<CharacterListVM>();
+                    services.AddTransient<CharactersVM>();
+                    services.AddTransient<EntitiesVM>();
+                    services.AddTransient<LoginVM>();
+                    services.AddTransient<SessionsVM>();
+
+                    // Add Windows
+
                     services.AddTransient<MainWindow>(s => new MainWindow
                     {
                         DataContext = s.GetRequiredService<NavigationVM>()
-                    });
-                    services.AddSingleton<UserAuthToken>();
-                    services.AddTransient<NavigationVM>();
-                    services.AddTransient<LoginWindow>();
-                    services.AddTransient<View.Login>(s => new View.Login()
-                    {
-                        DataContext = s.GetRequiredService<LoginVM>()
-                    });
-                    services.AddTransient<LoginVM>();
+                    });                 
                     services.AddTransient<LoginRegisterWindow>(s => new LoginRegisterWindow
                     {
                         DataContext = s.GetRequiredService<LoginVM>()
                     });
 
+                    // Add Services
 
-                    services.AddTransient<LoginNavigationVM>();
-                    services.AddTransient<SessionsVM>();
-                    services.AddTransient<RegisterWindow>();
-                    services.AddTransient<SessionSelectionWindow>();
-                    services.AddTransient<SessionCreationWindow>();
-                    services.AddTransient<SessionInviterWindow>();
+                    services.AddTransient<IAuthService, PlayerService>();
+                    services.AddTransient<IPlayerService, PlayerService>();
+                    services.AddTransient<ISessionService, SessionService>();
+
+                    // Add Other Services
+
                     services.AddSingleton(x => new Secret { SecretKey = "UpEpMJRbaFfDoj9pRPAw780uGPeDCnpBi3zQzb3CTLK1Z0lmTkZZS29ViVhvQrElFK26iSz03fC7wqLx8pbvbMIaYqlUOXJZ" });
 
                     services.AddSingleton(x =>
@@ -79,10 +89,6 @@ namespace OpenDnD
                         x.UseSqlite(config.ConnectionString);
                     }, ServiceLifetime.Transient);
 
-                    services.AddTransient<IAuthService, PlayerService>();
-                    services.AddTransient<IPlayerService, PlayerService>();
-                    services.AddTransient<ISessionService, SessionService>();
-
                 })
                 .Build();
 
@@ -91,11 +97,6 @@ namespace OpenDnD
                 var context = scope.ServiceProvider.GetRequiredService<OpenDnDContext>();
                 context.Database.Migrate();
             }
-
-            //var loginWindow = Host.Services.GetRequiredService<LoginWindow>();
-            //loginWindow.Top = (SystemParameters.PrimaryScreenHeight - loginWindow.Height) / 2;
-            //loginWindow.Left = (SystemParameters.PrimaryScreenWidth - loginWindow.Width) / 2;
-            //loginWindow.Show();
 
             //var mainWindow = Host.Services.GetRequiredService<MainWindow>();
             //mainWindow.Show();

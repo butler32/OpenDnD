@@ -15,6 +15,8 @@
                 <ResourceDictionary Source="Styles/Texts.xaml" />
                 <ResourceDictionary Source="Styles/TopWindowPanel.xaml" />
                 <ResourceDictionary Source="Utilities/DataTemplate.xaml" />
+                <ResourceDictionary Source="Styles/Templates.xaml" />
+                <ResourceDictionary Source="Styles/Converters.xaml" />
 
             </ResourceDictionary.MergedDictionaries>
             

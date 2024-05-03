@@ -29,6 +29,7 @@ namespace OpenDnD.Interfaces
 
         public void ChangeCurrentSessionMap(AuthToken authToken, Guid sessionId, Guid sessionMapId);
         public List<SessionPlayer> GetSessionPlayers(AuthToken authToken, Guid sessionId);
+        public List<Session> GetSessionsByIds(AuthToken authToken, List<Guid> sessionId);
 
     }
 

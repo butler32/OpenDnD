@@ -23,12 +23,4 @@
         <view:Entities />
     </DataTemplate>
 
-    <DataTemplate DataType="{x:Type vm:LoginVM}" >
-        <view:Login />
-    </DataTemplate>
-
-    <DataTemplate DataType="{x:Type vm:RegistrationVM}" >
-        <view:Registration />
-    </DataTemplate>
-
 </ResourceDictionary>

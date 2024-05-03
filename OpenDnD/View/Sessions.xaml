@@ -3,10 +3,49 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:vm="clr-namespace:OpenDnD.ViewModel"
+             xmlns:util="clr-namespace:OpenDnD.Utilities"
+             xmlns:Icon="http://metro.mahapps.com/winfx/xaml/iconpacks"
              xmlns:local="clr-namespace:OpenDnD.View"
+             d:DataContext="{d:DesignInstance Type=vm:SessionsVM}"
              mc:Ignorable="d" 
              d:DesignHeight="720" d:DesignWidth="1052">
     <Grid>
-        <Label Content="Sessions" FontSize="50" Foreground="White" />
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" /> 
+            <RowDefinition Height="*" /> 
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0">
+            <TextBlock Margin="115 5 0 5" VerticalAlignment="Center" Foreground="White" Width="300" HorizontalAlignment="Left"
+                       Panel.ZIndex="1" IsHitTestVisible="False" Text="Поиск..." 
+                       Visibility="{Binding ElementName=nameFilter, Path=Text.IsEmpty, Converter={StaticResource BoolToVis}}" />
+
+            <TextBox Foreground="White" x:Name="nameFilter" Width="300" HorizontalAlignment="Left" Margin="80 5 0 5"
+                     Background="#69371c" Text="{Binding SearchBox}"/>
+            <Icon:PackIconMaterial Kind="Magnify" Style="{StaticResource SessionsSearchIcon}" Margin="92 5 0 5"/>
+        </Grid>
+
+
+        <Grid Grid.Row="1">
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <ItemsControl ItemsSource="{Binding CurentSessions}">
+                    <ItemsControl.Resources>
+                        <util:SessionCardTemplateSelector x:Key="SessionCardTemplateSelector"
+                             EmptyTemplate="{StaticResource EmptySessionCardTemplate}"
+                             SessionTemplate="{StaticResource SessionCardTemplate}"/>
+                    </ItemsControl.Resources>
+                    <ItemsControl.ItemTemplateSelector>
+                        <StaticResource ResourceKey="SessionCardTemplateSelector"/>
+                    </ItemsControl.ItemTemplateSelector>
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel Orientation="Horizontal"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                </ItemsControl>
+            </ScrollViewer>
+        </Grid>
+        
     </Grid>
 </UserControl>

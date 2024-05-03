@@ -2,7 +2,7 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:Icon="http://metro.mahapps.com/winfx/xaml/iconpacks">
 
-    <Style x:Key="LoginWindowTopButtonIcon" TargetType="Icon:PackIconMaterial">
+    <Style x:Key="WindowTopButtonIcon" TargetType="Icon:PackIconMaterial">
         <Setter Property="Height" Value="18" />
         <Setter Property="Width" Value="18" />
     </Style>
@@ -12,6 +12,34 @@
         <Setter Property="Width" Value="25"/>
         <Setter Property="VerticalAlignment" Value="Center"/>
         <Setter Property="Margin" Value="30 0 0 0"/>
+    </Style>
+
+    <Style x:Key="SessionCreateButtonIcon" TargetType="Icon:PackIconMaterial">
+        <Setter Property="Height" Value="100"/>
+        <Setter Property="Width" Value="100"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="HorizontalAlignment" Value="Center"/>
+        <Setter Property="Background" Value="#e69d57" />
+        <Setter Property="BorderBrush" Value="Transparent"/>
+    </Style>
+
+    <Style x:Key="SessionCardButtonsIcon" TargetType="Icon:PackIconMaterial">
+        <Setter Property="Height" Value="30"/>
+        <Setter Property="Width" Value="30"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="HorizontalAlignment" Value="Center"/>
+        <Setter Property="Background" Value="#e69d57" />
+        <Setter Property="BorderBrush" Value="Transparent"/>
+    </Style>
+
+    <Style x:Key="SessionsSearchIcon" TargetType="Icon:PackIconMaterial">
+        <Setter Property="Height" Value="15" />
+        <Setter Property="Width" Value="15" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderBrush" Value="Transparent" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="HorizontalAlignment" Value="Left" />
+        <Setter Property="Foreground" Value="White" />
     </Style>
 
 </ResourceDictionary>

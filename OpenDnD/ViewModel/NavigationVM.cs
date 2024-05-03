@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using OpenDnD.Interfaces;
 using OpenDnD.Utilities;
 using System.Windows.Input;
 
@@ -7,8 +6,15 @@ namespace OpenDnD.ViewModel
 {
     public class NavigationVM : ViewModelBase, ICloseWindow
     {
-        private object _currentView;
-        public object CurrentView 
+        private ViewModelBase? _previousView;
+        public ViewModelBase? PreviousView
+        {
+            get { return _previousView; }
+            set { _previousView = value; OnPropertyChanged(); }
+        }
+
+        private ViewModelBase _currentView;
+        public ViewModelBase CurrentView 
         {
             get { return _currentView; } 
             set { _currentView = value; OnPropertyChanged(); }
@@ -24,11 +30,23 @@ namespace OpenDnD.ViewModel
         public UserAuthToken UserAuthToken { get; }
         public Action Close { get; set; }
 
-        private void Sessions(object? obj) => CurrentView = ServiceProvider.GetRequiredService<SessionsVM>();
-        private void SessionCreation(object obj) => CurrentView = new SessionCreationVM();
-        private void Characters(object obj) => CurrentView = new CharactersVM();
-        private void CharacterList(object obj) => CurrentView = new CharacterListVM();
-        private void Entities(object obj) => CurrentView = new EntitiesVM();
+        private void Sessions(object? obj)
+        {
+            var sessionsVM = ServiceProvider.GetRequiredService<SessionsVM>();
+
+            sessionsVM.SessionCreationRequested += SessionCreationEventHandler;
+
+            CurrentView = sessionsVM;
+        }
+        private void SessionCreation(object obj)
+        {
+            PreviousView = ServiceProvider.GetRequiredService<SessionsVM>();
+
+            CurrentView = ServiceProvider.GetRequiredService<SessionCreationVM>();
+        }
+        private void Characters(object obj) => CurrentView = ServiceProvider.GetRequiredService<CharactersVM>();
+        private void CharacterList(object obj) => CurrentView = ServiceProvider.GetRequiredService<CharacterListVM>();
+        private void Entities(object obj) => CurrentView = ServiceProvider.GetRequiredService<EntitiesVM>();
         private void CloseWindow()
         {
             Close?.Invoke();
@@ -38,6 +56,11 @@ namespace OpenDnD.ViewModel
             var loginWindow = ServiceProvider.GetRequiredService<LoginRegisterWindow>();
             loginWindow.Show();
             CloseWindow();
+        }
+
+        private void SessionCreationEventHandler()
+        {
+            SessionCreationCommand.Execute(null);
         }
 
         public bool CanClose()
@@ -57,6 +80,7 @@ namespace OpenDnD.ViewModel
             ServiceProvider = serviceProvider;
             UserAuthToken = userAuthToken;
             SessionsCommand.Execute(null);
+            PreviousView = null;
         }
     }
 }

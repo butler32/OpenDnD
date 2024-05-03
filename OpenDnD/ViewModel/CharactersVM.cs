@@ -1,12 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using OpenDnD.Utilities;
 
 namespace OpenDnD.ViewModel
 {
-    class CharactersVM
+    class CharactersVM : ViewModelBase
     {
+        public CharactersVM(IServiceProvider serviceProvider)
+        {
+            ServiceProvider = serviceProvider;
+        }
+
+        public IServiceProvider ServiceProvider { get; }
     }
 }
