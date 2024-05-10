@@ -23,4 +23,8 @@
         <view:Entities />
     </DataTemplate>
 
+    <DataTemplate DataType="{x:Type vm:SessionInviterVM}" >
+        <view:SessionInviter />
+    </DataTemplate>
+
 </ResourceDictionary>

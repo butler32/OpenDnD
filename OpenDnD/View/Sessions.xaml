@@ -31,7 +31,7 @@
             <ScrollViewer VerticalScrollBarVisibility="Auto">
                 <ItemsControl ItemsSource="{Binding CurentSessions}">
                     <ItemsControl.Resources>
-                        <util:SessionCardTemplateSelector x:Key="SessionCardTemplateSelector"
+                        <util:CardTemplateSelector x:Key="SessionCardTemplateSelector"
                              EmptyTemplate="{StaticResource EmptySessionCardTemplate}"
                              SessionTemplate="{StaticResource SessionCardTemplate}"/>
                     </ItemsControl.Resources>

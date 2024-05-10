@@ -19,6 +19,7 @@
         WindowStyle="None"
         Background="Transparent">
 
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -60,14 +61,15 @@
 
                     <StackPanel>
 
-                        <!-- Sessions -->
+                        <!-- Back -->
 
                         <Menu:Btn Style="{StaticResource BtnStyle}"
-                                  Command="{Binding SessionsCommand}"
-                                  Visibility="Hidden">
+                                  Command="{Binding BackCommand}"
+                                  Visibility="{Binding PreviousView, Converter={StaticResource NullToVis}}">
 
                             <Grid>
 
+                                <Icon:PackIconMaterial Kind="ArrowLeft" Style="{StaticResource LeftMenuButtons}"/>
                                 <TextBlock Style="{StaticResource Text_Style}" Text="Назад" />
 
                             </Grid>

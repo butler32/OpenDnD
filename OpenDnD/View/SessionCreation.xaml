@@ -3,10 +3,39 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:OpenDnD.View"
+             xmlns:util="clr-namespace:OpenDnD.Utilities"
+             xmlns:local="clr-namespace:OpenDnD.View" xmlns:viewmodel="clr-namespace:OpenDnD.ViewModel" d:DataContext="{d:DesignInstance Type=viewmodel:SessionCreationVM}"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
-            
+
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+
+        <TextBox Grid.Row="0" Width="350" HorizontalAlignment="Center" Text="{Binding CurrentSession.SessionName}" />
+
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+            <ItemsControl ItemsSource="{Binding PlayersList}">
+                <ItemsControl.Resources>
+                    <util:CardTemplateSelector x:Key="PlayerCardTemplateSelector"
+                        EmptyTemplate="{StaticResource EmptyUserCardForSessionCreation}"
+                        SessionTemplate="{StaticResource UserCardForSessionCreation}"/>
+                </ItemsControl.Resources>
+                <ItemsControl.ItemTemplateSelector>
+                    <StaticResource ResourceKey="PlayerCardTemplateSelector"/>
+                </ItemsControl.ItemTemplateSelector>
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel Orientation="Horizontal"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+            </ItemsControl>
+        </ScrollViewer>
+
+        <Button Grid.Row="2" Style="{StaticResource SaveSessionButton}" Content="Сохранить" />
+
     </Grid>
 </UserControl>

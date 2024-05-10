@@ -54,6 +54,7 @@ namespace OpenDnD
                     services.AddTransient<EntitiesVM>();
                     services.AddTransient<LoginVM>();
                     services.AddTransient<SessionsVM>();
+                    services.AddTransient<SessionInviterVM>();
 
                     // Add Windows
 
@@ -97,9 +98,6 @@ namespace OpenDnD
                 var context = scope.ServiceProvider.GetRequiredService<OpenDnDContext>();
                 context.Database.Migrate();
             }
-
-            //var mainWindow = Host.Services.GetRequiredService<MainWindow>();
-            //mainWindow.Show();
 
             var loginRegWindow = Host.Services.GetRequiredService<LoginRegisterWindow>();
             loginRegWindow.Show();

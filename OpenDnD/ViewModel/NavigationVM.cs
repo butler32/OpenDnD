@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using OpenDnD.Model;
 using OpenDnD.Utilities;
 using System.Windows.Input;
 
@@ -20,12 +21,14 @@ namespace OpenDnD.ViewModel
             set { _currentView = value; OnPropertyChanged(); }
         }
 
-        public ICommand SessionsCommand { get; set; }
-        public ICommand SessionCreationCommand { get; set; }
-        public ICommand CharactersCommand { get; set; }
-        public ICommand CharacterListCommand { get; set; }
-        public ICommand EntitiesCommand { get; set; }
-        public ICommand LogoutCommand { get; set; }
+        public ICommand SessionsCommand { get; }
+        public ICommand SessionCreationCommand { get; }
+        public ICommand CharactersCommand { get; }
+        public ICommand CharacterListCommand { get; }
+        public ICommand EntitiesCommand { get; }
+        public ICommand BackCommand { get; }
+        public ICommand LogoutCommand { get; }
+        public ICommand SessionInviterCommand { get; }
         public IServiceProvider ServiceProvider { get; }
         public UserAuthToken UserAuthToken { get; }
         public Action Close { get; set; }
@@ -36,17 +39,64 @@ namespace OpenDnD.ViewModel
 
             sessionsVM.SessionCreationRequested += SessionCreationEventHandler;
 
+            PreviousView = null;
+
             CurrentView = sessionsVM;
         }
+
         private void SessionCreation(object obj)
         {
-            PreviousView = ServiceProvider.GetRequiredService<SessionsVM>();
+            PreviousView = (ViewModelBase?)CurrentView.Clone();
 
-            CurrentView = ServiceProvider.GetRequiredService<SessionCreationVM>();
+            var vm = ServiceProvider.GetRequiredService<SessionCreationVM>();
+
+            if (obj is SessionModel)
+            {
+                vm.CurrentSession = (SessionModel)obj;
+            }
+
+            vm.InviteEvent += InviteEventHandler;
+
+            CurrentView = vm;
         }
-        private void Characters(object obj) => CurrentView = ServiceProvider.GetRequiredService<CharactersVM>();
+        
+        private void SessionInviter(object obj)
+        {
+            PreviousView = (ViewModelBase?)CurrentView.Clone();
+
+            var vm = ServiceProvider.GetRequiredService<SessionInviterVM>();
+
+            vm.SetCurrentSession((Guid)obj);
+
+            CurrentView = vm;
+        }
+
+        private void InviteEventHandler(Guid guid)
+        {
+            SessionInviterCommand.Execute(guid);
+        }
+
+        private void Characters(object obj)
+        {
+            PreviousView = null;
+
+            CurrentView = ServiceProvider.GetRequiredService<CharactersVM>();
+        }
         private void CharacterList(object obj) => CurrentView = ServiceProvider.GetRequiredService<CharacterListVM>();
-        private void Entities(object obj) => CurrentView = ServiceProvider.GetRequiredService<EntitiesVM>();
+        private void Entities(object obj)
+        {
+            PreviousView = null;
+
+            CurrentView = ServiceProvider.GetRequiredService<EntitiesVM>();
+        }
+
+        private void Back(object obj)
+        {
+            CurrentView = (ViewModelBase)PreviousView.Clone();
+
+            PreviousView = null;
+        }
+
         private void CloseWindow()
         {
             Close?.Invoke();
@@ -58,9 +108,9 @@ namespace OpenDnD.ViewModel
             CloseWindow();
         }
 
-        private void SessionCreationEventHandler()
+        private void SessionCreationEventHandler(object? obj)
         {
-            SessionCreationCommand.Execute(null);
+            SessionCreationCommand.Execute(obj);
         }
 
         public bool CanClose()
@@ -76,6 +126,8 @@ namespace OpenDnD.ViewModel
             CharacterListCommand = new RelayCommand(CharacterList);
             EntitiesCommand = new RelayCommand(Entities);
             LogoutCommand = new RelayCommand(Logout);
+            BackCommand = new RelayCommand(Back);
+            SessionInviterCommand = new RelayCommand(SessionInviter);
 
             ServiceProvider = serviceProvider;
             UserAuthToken = userAuthToken;

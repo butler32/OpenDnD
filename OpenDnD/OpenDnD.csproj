@@ -9,6 +9,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Images\art.jpg" />
+    <None Remove="Images\art1.jpg" />
+    <None Remove="Images\art2.jpg" />
+    <None Remove="Images\art3.jpg" />
+    <None Remove="Images\art4.jpg" />
+    <None Remove="Images\art5.jpg" />
+    <None Remove="Images\art6.jpg" />
     <None Remove="Images\tavern.jpg" />
     <None Remove="Images\tavern2.jpg" />
   </ItemGroup>
@@ -26,6 +33,24 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Images\art1.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\art2.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\art3.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\art4.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\art5.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\art6.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Images\tavern.jpg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>

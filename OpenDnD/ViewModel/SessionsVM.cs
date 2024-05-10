@@ -58,19 +58,19 @@ namespace OpenDnD.ViewModel
         public ICommand ExitSessionCommand { get; }
         public ICommand JoinSessionCommand { get; }
 
-        public Action SessionCreationRequested;
+        public Action<object?> SessionCreationRequested;
 
-        private void CreateSession(Object obj)
+        private void CreateSession(object obj)
         {
-            SessionCreationRequested?.Invoke();
+            SessionCreationRequested?.Invoke(null);
         }
 
-        private void EditSession(Object obj)
+        private void EditSession(object obj)
         {
-
+            SessionCreationRequested?.Invoke(obj);
         }
 
-        private void ExitSession(Object obj)
+        private void ExitSession(object obj)
         {
             if (obj is SessionModel session)
             {
@@ -81,7 +81,7 @@ namespace OpenDnD.ViewModel
         }
 
 
-        private void JoinSession(Object obj)
+        private void JoinSession(object obj)
         {
 
         }

@@ -3,7 +3,7 @@ using System.Windows.Controls;
 
 namespace OpenDnD.Utilities
 {
-    class SessionCardTemplateSelector : DataTemplateSelector
+    class CardTemplateSelector : DataTemplateSelector
     {
         public DataTemplate EmptyTemplate { get; set; }
         public DataTemplate SessionTemplate { get; set; }

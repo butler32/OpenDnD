@@ -78,13 +78,57 @@
                     <SolidColorBrush Color="#e69d57"/>
                 </Grid.Background>
 
-                <Button HorizontalAlignment="Center" VerticalAlignment="Center" Command="{Binding DataContext.CreateSessionCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}">
-                    <Icon:PackIconMaterial Kind="StickerPlusOutline" Style="{StaticResource SessionCreateButtonIcon}"/>
+                <Button Style="{StaticResource SessionCreateButton}" Command="{Binding DataContext.CreateSessionCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}">
+                    <StackPanel>
+                        <Icon:PackIconMaterial Kind="StickerPlusOutline" Style="{StaticResource SessionCreateButtonIcon}"/>
+                    </StackPanel>
                 </Button>
             </Grid>
         </Border>
     </DataTemplate>
     
+    <!--#endregion-->
+    
+    <!--#region Users cards for session creation-->
+
+    <DataTemplate x:Key="UserCardForSessionCreation">
+
+        <Border Margin="30 0 0 0" Background="#e69d57" CornerRadius="10">
+            <Grid>
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="25" />
+                    <RowDefinition Height="100" />
+                    <RowDefinition Height="25" />
+                </Grid.RowDefinitions>
+
+                <TextBlock Text="{Binding UserName}" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="0" FontSize="20" Foreground="White"/>
+
+                <Border Grid.Row="1" BorderThickness="0" VerticalAlignment="Center">
+                    <Button >
+                        <Image Source="{Binding Image}" MaxWidth="100" MaxHeight="100" MinHeight="50" MinWidth="50" />
+                    </Button>
+                </Border>
+
+                <TextBlock Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Center" Text="{Binding Role}" FontSize="20" Foreground="White"/>
+
+            </Grid>
+        </Border>
+        
+    </DataTemplate>
+
+    <DataTemplate x:Key="EmptyUserCardForSessionCreation">
+
+        <Border Margin="100 0 0 0" CornerRadius="10" Background="#e69d57">
+            <Grid>
+                <Button Style="{StaticResource SessionCreateButton}" Width="100" Height="100" BorderBrush="Transparent" HorizontalAlignment="Center" VerticalAlignment="Center" Command="{Binding DataContext.InviteCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}">
+                    <Icon:PackIconMaterial Kind="StickerPlusOutline" Style="{StaticResource SessionInviteButtonIcon}"/>
+                </Button>
+            </Grid>
+        </Border>
+        
+    </DataTemplate>
+
     <!--#endregion-->
 
 </ResourceDictionary>

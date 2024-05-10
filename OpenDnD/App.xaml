@@ -2,7 +2,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:OpenDnD"
              x:Class="OpenDnD.App"
-            StartupUri="Program.xaml">
+             StartupUri="Program.xaml">
     <Application.Resources>
 
         <ResourceDictionary>
@@ -17,6 +17,7 @@
                 <ResourceDictionary Source="Utilities/DataTemplate.xaml" />
                 <ResourceDictionary Source="Styles/Templates.xaml" />
                 <ResourceDictionary Source="Styles/Converters.xaml" />
+                <ResourceDictionary Source="Styles/Images.xaml" />
 
             </ResourceDictionary.MergedDictionaries>
             
