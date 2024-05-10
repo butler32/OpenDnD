@@ -21,9 +21,9 @@ namespace OpenDnD.DB.Services
         public IAuthService AuthService { get; }
         public ISessionService SessionService { get; }
 
-        public event ISessionChatService.SessionChatMessageChanged OnSessionChatMessageChanged;
-        public event ISessionChatService.SessionChatMessageDeleted OnSessionChatMessageDeleted;
-        public event ISessionChatService.SessionChatMessageCreated OnSessionChatMessageCreated;
+        public event ISessionChatService.SessionChatMessageChanged? OnSessionChatMessageChanged;
+        public event ISessionChatService.SessionChatMessageDeleted? OnSessionChatMessageDeleted;
+        public event ISessionChatService.SessionChatMessageCreated? OnSessionChatMessageCreated;
 
         private string RenderSpecialString(string str)
         {
