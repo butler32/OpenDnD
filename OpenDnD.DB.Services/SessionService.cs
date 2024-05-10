@@ -8,8 +8,8 @@ namespace OpenDnD.DB.Services
         public OpenDnDContext OpenDnDContext { get; }
         public IAuthService AuthService { get; }
 
-        public event ISessionService.CurrentSessionMapChanged OnCurrentSessionMapChanged;
-        public event ISessionService.SessionChatMessageChanged OnSessionChatMessageChanged;
+        public event ISessionService.CurrentSessionMapChanged? OnCurrentSessionMapChanged;
+        public event ISessionService.SessionChatMessageChanged? OnSessionChatMessageChanged;
 
         public SessionService(OpenDnDContext openDnDContext, IAuthService authService)
         {
@@ -123,6 +123,9 @@ namespace OpenDnD.DB.Services
             AuthService.CheckAuthTokenOrThrowException(authToken);
 
             var session = OpenDnDContext.Sessions.FirstOrDefault(x => x.SessionId == id);
+            if (session is null)
+                throw new NoEntryWithRequiredIdException<Session>(id);
+
             if (request.SessionName is not null)
             {
                 session.SessionName = request.SessionName;

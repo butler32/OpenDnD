@@ -7,7 +7,7 @@ namespace OpenDnD.Interfaces
     public class SessionRequest 
     {
         public string? SessionName { get; set; }
-        public List<Guid> PlayersIds {  get; set; }
+        public List<Guid>? PlayersIds {  get; set; }
     }
 
     public class Session
@@ -27,10 +27,10 @@ namespace OpenDnD.Interfaces
         public void RemovePlayerFromSession(AuthToken authToken, Guid sessionId, Guid userId);
 
         delegate void CurrentSessionMapChanged(SessionMapEntity sessionMapEntity);
-        event CurrentSessionMapChanged OnCurrentSessionMapChanged;
+        event CurrentSessionMapChanged? OnCurrentSessionMapChanged;
 
         delegate void SessionChatMessageChanged(SessionChatMessage sessionChatMessage);
-        event SessionChatMessageChanged OnSessionChatMessageChanged;
+        event SessionChatMessageChanged? OnSessionChatMessageChanged;
 
         public void ChangeCurrentSessionMap(AuthToken authToken, Guid sessionId, Guid sessionMapId);
         public List<SessionPlayer> GetSessionPlayers(AuthToken authToken, Guid sessionId);

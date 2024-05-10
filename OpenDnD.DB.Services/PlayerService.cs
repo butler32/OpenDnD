@@ -25,6 +25,10 @@ namespace OpenDnD.DB.Services
         {
             this.CheckAuthTokenOrThrowException(authToken);
 
+            ArgumentNullException.ThrowIfNull(request.UserName, nameof(PlayerRequest.UserName));
+            ArgumentNullException.ThrowIfNull(request.PasswordHash, nameof(PlayerRequest.PasswordHash));
+            ArgumentNullException.ThrowIfNull(request.PasswordSalt, nameof(PlayerRequest.PasswordSalt));
+
             var player = new Player
             {
                 UserName = request.UserName,

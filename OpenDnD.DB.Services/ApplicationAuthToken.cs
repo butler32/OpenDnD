@@ -10,5 +10,6 @@ namespace OpenDnD.DB.Services
     public class ApplicationAuthToken
     {
         public AuthToken AuthToken { get; set; }
+        public ApplicationAuthToken(AuthToken authToken) {  AuthToken = authToken; }
     }
 }
