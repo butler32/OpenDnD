@@ -139,7 +139,9 @@ namespace OpenDnD.DB.Services
             AuthService.CheckAuthTokenOrThrowException(authToken);
 
             return OpenDnDContext.SessionPlayers
-                .Where(x => x.SessionId == sessionId).Select(x => new Interfaces.SessionPlayer(x.PlayerId, x.Player.UserName, (RoleEnum)x.PlayerRole)).ToList();
+                .Where(x => x.SessionId == sessionId)
+                .Select(x => new Interfaces.SessionPlayer(x.PlayerId, x.Player.UserName, (RoleEnum)x.PlayerRole))
+                .ToList();
         }
 
         public bool CheckPlayerHasMinimusAccess(AuthToken authToken, Guid sessionId, Guid playerId, RoleEnum role)
@@ -164,13 +166,9 @@ namespace OpenDnD.DB.Services
             AuthService.CheckAuthTokenOrThrowException(authToken);
 
             return OpenDnDContext.Sessions
-                           .Where(x => sessionId.Contains(x.SessionId))
-                           .Select(x => new Interfaces.Session
-                           {
-                               SessionId = x.SessionId,
-                               SessionName = x.SessionName
-                           })
-                           .ToList();
+                .Where(x => sessionId.Contains(x.SessionId))
+                .Select(x => new Interfaces.Session(x.SessionId, x.SessionName))
+                .ToList();
         }
     }
 }

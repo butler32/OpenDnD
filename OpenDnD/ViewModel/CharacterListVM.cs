@@ -1,4 +1,5 @@
 ﻿using OpenDnD.Utilities;
+using OpenDnD.Utilities.DI;
 
 namespace OpenDnD.ViewModel
 {
@@ -6,9 +7,10 @@ namespace OpenDnD.ViewModel
     {
         public CharacterListVM(IServiceProvider serviceProvider)
         {
-            ServiceProvider = serviceProvider;
+            serviceProvider.UseDI(this);
         }
 
-        public IServiceProvider ServiceProvider { get; }
+        [FromDI]
+        public IServiceProvider ServiceProvider { get; private set; }
     }
 }

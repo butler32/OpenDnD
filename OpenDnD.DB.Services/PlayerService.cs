@@ -25,9 +25,9 @@ namespace OpenDnD.DB.Services
         {
             this.CheckAuthTokenOrThrowException(authToken);
 
-            ArgumentNullException.ThrowIfNull(request.UserName, nameof(PlayerRequest.UserName));
-            ArgumentNullException.ThrowIfNull(request.PasswordHash, nameof(PlayerRequest.PasswordHash));
-            ArgumentNullException.ThrowIfNull(request.PasswordSalt, nameof(PlayerRequest.PasswordSalt));
+            ArgumentException.ThrowIfNullOrEmpty(request.UserName, nameof(PlayerRequest.UserName));
+            ArgumentException.ThrowIfNullOrEmpty(request.PasswordHash, nameof(PlayerRequest.PasswordHash));
+            ArgumentException.ThrowIfNullOrEmpty(request.PasswordSalt, nameof(PlayerRequest.PasswordSalt));
 
             var player = new Player
             {
@@ -93,6 +93,9 @@ namespace OpenDnD.DB.Services
         {
             if (OpenDnDContext.Players.Any(x => x.UserName == login))
                 throw new Exception("User already exist");
+
+            ArgumentException.ThrowIfNullOrEmpty(password, nameof(password));
+
             var (hash, salt) = CryptoService.GetHashSaltPair(password);
 
             var playerId = Create(ApplicationAuthToken.AuthToken, new PlayerRequest
@@ -104,11 +107,7 @@ namespace OpenDnD.DB.Services
 
             var token = CryptoService.GetAuthToken(playerId, Secret.SecretKey);
 
-            return new AuthToken
-            {
-                PlayerId = playerId,
-                TokenValue = token,
-            };
+            return new AuthToken(playerId, token);
 
         }
 
@@ -123,11 +122,7 @@ namespace OpenDnD.DB.Services
 
             var token = CryptoService.GetAuthToken(player.PlayerId, Secret.SecretKey);
 
-            return new AuthToken
-            {
-                PlayerId = player.PlayerId,
-                TokenValue = token,
-            };
+            return new AuthToken(player.PlayerId, token);
         }
 
         public bool ValidateAuthToken(AuthToken authToken)

@@ -1,23 +1,51 @@
-﻿using System.Windows.Input;
-
-namespace OpenDnD.Utilities
+﻿namespace OpenDnD.Utilities
 {
+    public interface ICommand : System.Windows.Input.ICommand {
+        void System.Windows.Input.ICommand.Execute(object? parameter) => Execute();
+        bool System.Windows.Input.ICommand.CanExecute(object? parameter) => true;
+
+        void Execute();
+        public static RelayCommand<T> From<T>(Action<T> action) => new(action);
+        public static RelayCommand From(Action action) => new(action);
+
+    }
+
+    public interface ICommand<T> : System.Windows.Input.ICommand
+    {
+        void System.Windows.Input.ICommand.Execute(object? parameter) => Execute((T)parameter);
+        bool System.Windows.Input.ICommand.CanExecute(object? parameter) => true;
+        void Execute(T parameter);
+    }
+
     public class RelayCommand : ICommand
     {
-        private readonly Action<object> _execute;
-        private readonly Func<object, bool> _canExecute;
-
-        public event EventHandler CanExecuteChanged
+        public RelayCommand(Action action)
         {
-            add { CommandManager.RequerySuggested += value; }
-            remove { CommandManager.RequerySuggested -= value; }
+            Action = action;
         }
-        public RelayCommand(Action<object> execute, Func<object, bool> canExecute = null)
+
+        public Action Action { get; }
+
+        public event EventHandler? CanExecuteChanged;
+
+        public void Execute()
+        {
+            Action.Invoke();
+        }
+    }
+    
+
+    public class RelayCommand<T> : ICommand<T>
+    {
+        private readonly Action<T> _execute;
+
+        public RelayCommand(Action<T> execute)
         {
             _execute = execute;
-            _canExecute = canExecute;
         }
-        public bool CanExecute(object parameter) => _canExecute == null || _canExecute(parameter);
-        public void Execute(object parameter) => _execute(parameter);
+
+        public event EventHandler? CanExecuteChanged;
+
+        public void Execute(T parameter) => _execute(parameter);
     }
 }

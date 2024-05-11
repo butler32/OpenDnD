@@ -1,17 +1,15 @@
 ﻿using OpenDnD.Interfaces;
 using OpenDnD.Model;
 using OpenDnD.Utilities;
+using OpenDnD.Utilities.DI;
 
 namespace OpenDnD.ViewModel
 {
     class SessionInviterVM : ViewModelBase
     {
-        public SessionInviterVM(IServiceProvider serviceProvider, ISessionService sessionService, IPlayerService playerService, UserAuthToken userAuthToken)
+        public SessionInviterVM(IServiceProvider serviceProvider)
         {
-            ServiceProvider = serviceProvider;
-            SessionService = sessionService;
-            PlayerService = playerService;
-            UserAuthToken = userAuthToken;
+            serviceProvider.UseDI(this);
         }
 
         private SessionModel _currentSession;
@@ -21,14 +19,13 @@ namespace OpenDnD.ViewModel
             set { _currentSession = value; OnPropertyChanged(); }
         }
 
-        public IServiceProvider ServiceProvider { get; }
-        public ISessionService SessionService { get; }
-        public IPlayerService PlayerService { get; }
-        public UserAuthToken UserAuthToken { get; }
-
-        public void SetCurrentSession(Guid sessionId)
-        {
-            CurrentSession = Converters.SessionConverter(SessionService.Get(UserAuthToken.AuthToken, sessionId));
-        }
+        [FromDI]
+        public IServiceProvider ServiceProvider { get; private set; }
+        [FromDI]
+        public ISessionService SessionService { get; private set; }
+        [FromDI]
+        public IPlayerService PlayerService { get; private set; }
+        [FromDI]
+        public UserAuthToken UserAuthToken { get; private set; }
     }
 }

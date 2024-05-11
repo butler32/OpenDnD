@@ -1,30 +1,30 @@
 ﻿using OpenDnD.Interfaces;
 using OpenDnD.Model;
 using OpenDnD.Utilities;
+using OpenDnD.Utilities.DI;
 using System.Collections.ObjectModel;
 using System.IO;
-using System.Windows.Input;
 using System.Windows.Media.Imaging;
 
 namespace OpenDnD.ViewModel
 {
     class SessionCreationVM : ViewModelBase
     {
-        public SessionCreationVM(IServiceProvider serviceProvider, ISessionService sessionService, UserAuthToken userAuthToken)
+        public SessionCreationVM(IServiceProvider serviceProvider)
         {
-            ServiceProvider = serviceProvider;
-            SessionService = sessionService;
-            UserAuthToken = userAuthToken;
+            serviceProvider.UseDI(this);
 
-            SaveCommand = new RelayCommand(Save);
-            InviteCommand = new RelayCommand(Invite);
+            SaveCommand = ICommand.From(Save);
 
             Init();
         }
 
-        public IServiceProvider ServiceProvider { get; }
-        public ISessionService SessionService { get; }
-        public UserAuthToken UserAuthToken { get; }
+        [FromDI]
+        public IServiceProvider ServiceProvider { get; private set; }
+        [FromDI]
+        public ISessionService SessionService { get; private set; }
+        [FromDI]
+        public UserAuthToken UserAuthToken { get; private set; }
 
         private SessionModel _currentSession;
         public SessionModel CurrentSession 
@@ -47,12 +47,10 @@ namespace OpenDnD.ViewModel
             set { _playersList = value; OnPropertyChanged(); }
         }
 
-        public Action<Guid> InviteEvent;
-
         public ICommand SaveCommand { get; }
-        public ICommand InviteCommand { get; }
+        public ICommand<SessionModel> InviteCommand { get; set; }
 
-        private void Save(object obj)
+        private void Save()
         {
             SessionService.Update(UserAuthToken.AuthToken, CurrentSession.SessionId, new SessionRequest
             {
@@ -61,15 +59,10 @@ namespace OpenDnD.ViewModel
             });
         }
 
-        private void Invite(object obj)
+        private void Invite()
         {
-            InviteEvent?.Invoke(CurrentSession.SessionId);
+            InviteCommand.Execute(CurrentSession);
         }
-
-
-
-
-
 
         private void Init()
         {
@@ -79,7 +72,7 @@ namespace OpenDnD.ViewModel
                 new SessionPlayerModel
                 {
                     SessionId = Guid.NewGuid(),
-                    Image = ConvertByteArrayToBitmapImage (ConvertJpgToByteArray("D:\\Code\\repos\\OpenDnD\\OpenDnD\\Images\\art1.jpg")),
+                    Image = ConvertByteArrayToBitmapImage (ConvertJpgToByteArray("Images\\art1.jpg")),
                     PlayerId = Guid.NewGuid(),
                     UserName = "Stas",
                     Role = RoleEnum.Player.ToString(),
@@ -87,7 +80,7 @@ namespace OpenDnD.ViewModel
                 new SessionPlayerModel
                 {
                     SessionId = Guid.NewGuid(),
-                    Image = ConvertByteArrayToBitmapImage (ConvertJpgToByteArray("D:\\Code\\repos\\OpenDnD\\OpenDnD\\Images\\art2.jpg")),
+                    Image = ConvertByteArrayToBitmapImage (ConvertJpgToByteArray("Images\\art2.jpg")),
                     PlayerId = Guid.NewGuid(),
                     UserName = "Vlad",
                     Role = RoleEnum.Player.ToString(),
@@ -95,7 +88,7 @@ namespace OpenDnD.ViewModel
                 new SessionPlayerModel
                 {
                     SessionId = Guid.NewGuid(),
-                    Image = ConvertByteArrayToBitmapImage (ConvertJpgToByteArray("D:\\Code\\repos\\OpenDnD\\OpenDnD\\Images\\art3.jpg")),
+                    Image = ConvertByteArrayToBitmapImage (ConvertJpgToByteArray("Images\\art3.jpg")),
                     PlayerId = Guid.NewGuid(),
                     UserName = "Anton",
                     Role = RoleEnum.Player.ToString(),
@@ -103,7 +96,7 @@ namespace OpenDnD.ViewModel
                 new SessionPlayerModel
                 {
                     SessionId = Guid.NewGuid(),
-                    Image = ConvertByteArrayToBitmapImage (ConvertJpgToByteArray("D:\\Code\\repos\\OpenDnD\\OpenDnD\\Images\\art4.jpg")),
+                    Image = ConvertByteArrayToBitmapImage (ConvertJpgToByteArray("Images\\art4.jpg")),
                     PlayerId = Guid.NewGuid(),
                     UserName = "Iliya",
                     Role = RoleEnum.Master.ToString(),

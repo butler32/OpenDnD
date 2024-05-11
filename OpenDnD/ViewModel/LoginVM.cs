@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using OpenDnD.Interfaces;
 using OpenDnD.Utilities;
-using System.Windows.Input;
+using OpenDnD.Utilities.DI;
 
 namespace OpenDnD.ViewModel
 {
@@ -35,13 +35,16 @@ namespace OpenDnD.ViewModel
             Close?.Invoke();
         }
 
-        public IServiceProvider ServiceProvider { get; }
-        public IAuthService AuthService { get; }
-        public UserAuthToken UserAuthToken { get; }
+        [FromDI]
+        public IServiceProvider ServiceProvider { get; private set; }
+        [FromDI]
+        public IAuthService AuthService { get; private set; }
+        [FromDI]
+        public UserAuthToken UserAuthToken { get; private set; }
         public ICommand LoginCommand { get; set; }
         public ICommand RegistrationCommand { get; set; }
 
-        private void Login(object obj)
+        private void Login()
         {
             try
             {
@@ -59,7 +62,7 @@ namespace OpenDnD.ViewModel
             }
         }
 
-        private void Registration(object obj)
+        private void Registration()
         {
             try
             {
@@ -82,12 +85,12 @@ namespace OpenDnD.ViewModel
             return true;
         }
 
-        public LoginVM(IServiceProvider serviceProvider, IAuthService authService, UserAuthToken userAuthToken)
-        {
-            ServiceProvider = serviceProvider;
-            AuthService = authService;
-            UserAuthToken = userAuthToken;
+        public LoginVM(IServiceProvider serviceProvider)
+        {   
+            serviceProvider.UseDI(this);
+
             LoginCommand = new RelayCommand(Login);
+            RegistrationCommand = new RelayCommand(Registration);
         }
     }
 }
