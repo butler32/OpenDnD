@@ -19,13 +19,13 @@ namespace OpenDnD.Interfaces
     public interface ISessionChatService
     {
         delegate void SessionChatMessageChanged(SessionChatMessage sessionChatMessage);
-        event SessionChatMessageChanged OnSessionChatMessageChanged;
+        event SessionChatMessageChanged? OnSessionChatMessageChanged;
 
         delegate void SessionChatMessageDeleted(Guid messageId);
-        event SessionChatMessageDeleted OnSessionChatMessageDeleted;
+        event SessionChatMessageDeleted? OnSessionChatMessageDeleted;
 
         delegate void SessionChatMessageCreated(SessionChatMessage sessionChatMessage);
-        event SessionChatMessageCreated OnSessionChatMessageCreated;
+        event SessionChatMessageCreated? OnSessionChatMessageCreated;
 
         Guid CreateChatMessage(AuthToken authToken, Guid sessionId, string message);
         void DeleteChatMessage(AuthToken authToken, Guid messageId);

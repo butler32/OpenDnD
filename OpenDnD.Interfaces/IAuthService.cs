@@ -10,6 +10,12 @@ namespace OpenDnD.Interfaces
 {
     public class AuthToken
     {
+        public AuthToken(Guid playerId, string tokenValue)
+        {
+            PlayerId = playerId;
+            TokenValue = tokenValue;
+        }
+
         public Guid PlayerId { get; set; }
         public string TokenValue { get; set; }
     }

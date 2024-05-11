@@ -5,6 +5,7 @@ using OpenDnD.DB;
 using OpenDnD.DB.Services;
 using OpenDnD.Interfaces;
 using OpenDnD.Utilities;
+using OpenDnD.Utilities.DI;
 using OpenDnD.ViewModel;
 using OpenDnD.Windows;
 using System.IO;
@@ -12,6 +13,7 @@ using System.Windows;
 
 namespace OpenDnD
 {
+
     /// <summary>
     /// Interaction logic for Page1.xaml
     /// </summary>
@@ -34,18 +36,16 @@ namespace OpenDnD
                     {
                         var Secret = x.GetRequiredService<Secret>();
                         var token = CryptoService.GetAuthToken(Guid.Empty, Secret.SecretKey);
-                        return new ApplicationAuthToken
-                        {
-                            AuthToken = new AuthToken
-                            {
-                                PlayerId = Guid.Empty,
-                                TokenValue = token
-                            }
-                        };
+                        return new ApplicationAuthToken(new AuthToken(Guid.Empty, token));
                     });
 
-                    // Add ViewModels
+                    // --- WARNING --- USE EXPERIMENTAL DI
+                    services.UseDI();
+                    //
 
+                    // Add ViewModels
+                    
+                    /*
                     services.AddTransient<NavigationVM>();
                     services.AddTransient<SessionsVM>();
                     services.AddTransient<SessionCreationVM>();
@@ -55,16 +55,17 @@ namespace OpenDnD
                     services.AddTransient<LoginVM>();
                     services.AddTransient<SessionsVM>();
                     services.AddTransient<SessionInviterVM>();
+                    */
 
                     // Add Windows
 
                     services.AddTransient<MainWindow>(s => new MainWindow
                     {
-                        DataContext = s.GetRequiredService<NavigationVM>()
+                        DataContext = new NavigationVM(s)
                     });                 
                     services.AddTransient<LoginRegisterWindow>(s => new LoginRegisterWindow
                     {
-                        DataContext = s.GetRequiredService<LoginVM>()
+                        DataContext = new LoginVM(s)
                     });
 
                     // Add Services

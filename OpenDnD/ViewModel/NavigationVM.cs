@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using OpenDnD.Model;
 using OpenDnD.Utilities;
-using System.Windows.Input;
+using OpenDnD.Utilities.DI;
 
 namespace OpenDnD.ViewModel
 {
@@ -15,82 +15,80 @@ namespace OpenDnD.ViewModel
         }
 
         private ViewModelBase _currentView;
-        public ViewModelBase CurrentView 
+        public ViewModelBase CurrentView
         {
-            get { return _currentView; } 
+            get { return _currentView; }
             set { _currentView = value; OnPropertyChanged(); }
         }
 
         public ICommand SessionsCommand { get; }
-        public ICommand SessionCreationCommand { get; }
         public ICommand CharactersCommand { get; }
         public ICommand CharacterListCommand { get; }
         public ICommand EntitiesCommand { get; }
         public ICommand BackCommand { get; }
         public ICommand LogoutCommand { get; }
-        public ICommand SessionInviterCommand { get; }
-        public IServiceProvider ServiceProvider { get; }
-        public UserAuthToken UserAuthToken { get; }
+        [FromDI]
+        public IServiceProvider ServiceProvider { get; private set; }
+        [FromDI]
+        public UserAuthToken UserAuthToken { get; private set; }
         public Action Close { get; set; }
 
-        private void Sessions(object? obj)
+        private void Sessions()
         {
-            var sessionsVM = ServiceProvider.GetRequiredService<SessionsVM>();
-
-            sessionsVM.SessionCreationRequested += SessionCreationEventHandler;
+            var sessionsVM = new SessionsVM(ServiceProvider)
+            {
+                CreateSessionCommand = ICommand.From(() => SessionCreation(null)),
+                EditSessionCommand = ICommand.From((SessionModel sm) => SessionCreation(sm))
+            };
 
             PreviousView = null;
 
             CurrentView = sessionsVM;
         }
 
-        private void SessionCreation(object obj)
+        private void SessionCreation(SessionModel? obj)
         {
             PreviousView = (ViewModelBase?)CurrentView.Clone();
 
-            var vm = ServiceProvider.GetRequiredService<SessionCreationVM>();
-
-            if (obj is SessionModel)
+            var vm = new SessionCreationVM(ServiceProvider)
             {
-                vm.CurrentSession = (SessionModel)obj;
-            }
-
-            vm.InviteEvent += InviteEventHandler;
+                CurrentSession = obj ?? new SessionModel { },
+                InviteCommand = ICommand.From((SessionModel sm) => SessionInviter(sm))
+            };
 
             CurrentView = vm;
         }
-        
-        private void SessionInviter(object obj)
+
+        private void SessionInviter(SessionModel sessionModel)
         {
             PreviousView = (ViewModelBase?)CurrentView.Clone();
 
-            var vm = ServiceProvider.GetRequiredService<SessionInviterVM>();
-
-            vm.SetCurrentSession((Guid)obj);
+            var vm = new SessionInviterVM(ServiceProvider)
+            {
+                CurrentSession = sessionModel
+            };
 
             CurrentView = vm;
         }
 
-        private void InviteEventHandler(Guid guid)
-        {
-            SessionInviterCommand.Execute(guid);
-        }
+        private void Characters()
+        { 
+            PreviousView = null;
 
-        private void Characters(object obj)
+            CurrentView = new CharactersVM(ServiceProvider);
+        }
+        private void CharacterList()
+        {
+            CurrentView = new CharacterListVM(ServiceProvider);
+        }
+        private void Entities()
         {
             PreviousView = null;
 
-            CurrentView = ServiceProvider.GetRequiredService<CharactersVM>();
-        }
-        private void CharacterList(object obj) => CurrentView = ServiceProvider.GetRequiredService<CharacterListVM>();
-        private void Entities(object obj)
-        {
-            PreviousView = null;
-
-            CurrentView = ServiceProvider.GetRequiredService<EntitiesVM>();
+            CurrentView = new EntitiesVM(ServiceProvider);
         }
 
-        private void Back(object obj)
+        private void Back()
         {
             CurrentView = (ViewModelBase)PreviousView.Clone();
 
@@ -101,16 +99,11 @@ namespace OpenDnD.ViewModel
         {
             Close?.Invoke();
         }
-        private void Logout(object ojb)
+        private void Logout()
         {
             var loginWindow = ServiceProvider.GetRequiredService<LoginRegisterWindow>();
             loginWindow.Show();
             CloseWindow();
-        }
-
-        private void SessionCreationEventHandler(object? obj)
-        {
-            SessionCreationCommand.Execute(obj);
         }
 
         public bool CanClose()
@@ -118,20 +111,19 @@ namespace OpenDnD.ViewModel
             return true;
         }
 
-        public NavigationVM(IServiceProvider serviceProvider, UserAuthToken userAuthToken)
+        public NavigationVM(IServiceProvider serviceProvider)
         {
-            SessionsCommand = new RelayCommand(Sessions);
-            SessionCreationCommand = new RelayCommand(SessionCreation);
-            CharactersCommand = new RelayCommand(Characters);
-            CharacterListCommand = new RelayCommand(CharacterList);
-            EntitiesCommand = new RelayCommand(Entities);
-            LogoutCommand = new RelayCommand(Logout);
-            BackCommand = new RelayCommand(Back);
-            SessionInviterCommand = new RelayCommand(SessionInviter);
+            serviceProvider.UseDI(this);
 
-            ServiceProvider = serviceProvider;
-            UserAuthToken = userAuthToken;
-            SessionsCommand.Execute(null);
+            SessionsCommand = ICommand.From(Sessions);
+            CharactersCommand = ICommand.From(Characters);
+            CharacterListCommand = ICommand.From(CharacterList);
+            EntitiesCommand = ICommand.From(Entities);
+            LogoutCommand = ICommand.From(Logout);
+            BackCommand = ICommand.From(Back);
+
+            
+            SessionsCommand.Execute();
             PreviousView = null;
         }
     }

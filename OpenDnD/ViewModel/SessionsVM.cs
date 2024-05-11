@@ -1,21 +1,26 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using OpenDnD.DB.Services;
 using OpenDnD.Interfaces;
 using OpenDnD.Model;
 using OpenDnD.Utilities;
+using OpenDnD.Utilities.DI;
 using System.Collections.ObjectModel;
-using System.Windows.Input;
 
 namespace OpenDnD.ViewModel
 {
     class SessionsVM : ViewModelBase
     {
-        public IServiceProvider ServiceProvider { get; }
-        public ISessionService SessionService { get; }
-        public UserAuthToken UserAuthToken { get; }
-        public IPlayerService PlayerService { get; }
+        [FromDI]
+        public IServiceProvider ServiceProvider { get; private set; }
+        [FromDI]
+        public ISessionService SessionService { get; private set; }
+        [FromDI]
+        public UserAuthToken UserAuthToken { get; private set; }
+        [FromDI]
+        public IPlayerService PlayerService { get; private set; }
 
-        private ObservableCollection<SessionModel> _sessions;
-        public ObservableCollection<SessionModel> Sessions
+        private List<SessionModel> _sessions;
+        public List<SessionModel> Sessions
         {
             get { return _sessions; }
             set { _sessions = value; OnPropertyChanged(); }
@@ -36,46 +41,33 @@ namespace OpenDnD.ViewModel
             { 
                 _searchBox = value;
 
-                CurentSessionsRefresh();
-                
-                if (string.IsNullOrEmpty(SearchBox))
+                CurentSessions.Clear();
+
+                if (string.IsNullOrWhiteSpace(SearchBox))
                 {
-                    CurentSessions = Sessions;
+                    foreach (var s in Sessions)
+                        CurentSessions.Add(s);
                 }
                 else
                 {
-                    CurentSessions.Remove(null);
-                    var a = CurentSessions.Where(x => x.SessionName.Contains(SearchBox)).ToList();
-                    CurentSessions = Converters.ConvertToObservableCollectionSession(a);
+                    foreach (var s in Sessions.Where(x => x.SessionName.Contains(SearchBox, StringComparison.InvariantCultureIgnoreCase)))
+                        CurentSessions.Add(s);
                 }
+
+                CurentSessions.Insert(0, null);
 
                 OnPropertyChanged(); 
             }
         }
 
-        public ICommand CreateSessionCommand { get; }
-        public ICommand EditSessionCommand { get; }
-        public ICommand ExitSessionCommand { get; }
-        public ICommand JoinSessionCommand { get; }
+        public ICommand CreateSessionCommand { get; set; }
+        public ICommand<SessionModel> EditSessionCommand { get; set; }
+        public ICommand<SessionModel> ExitSessionCommand { get; set; }
+        public ICommand<object> JoinSessionCommand { get; }
 
-        public Action<object?> SessionCreationRequested;
-
-        private void CreateSession(object obj)
+        private void ExitSession(SessionModel session)
         {
-            SessionCreationRequested?.Invoke(null);
-        }
-
-        private void EditSession(object obj)
-        {
-            SessionCreationRequested?.Invoke(obj);
-        }
-
-        private void ExitSession(object obj)
-        {
-            if (obj is SessionModel session)
-            {
-                SessionService.Delete(UserAuthToken.AuthToken, session.SessionId);
-            }
+            SessionService.Delete(UserAuthToken.AuthToken, session.SessionId);
             SearchBox = string.Empty;
             GetSessions();
         }
@@ -88,40 +80,23 @@ namespace OpenDnD.ViewModel
 
         private void GetSessions()
         {
-            Sessions = new ObservableCollection<SessionModel>
-            {
-                null
-            };
-            foreach (var session in Converters.ConvertToObservableCollectionSession(SessionService.GetList(UserAuthToken.AuthToken)))
-            {
-                Sessions.Add(session);
-            }
 
-            CurentSessionsRefresh();
-        }
+            Sessions = SessionService.GetList(UserAuthToken.AuthToken)
+                .Select(Converters.SessionConverter)
+                .ToList();
 
-        private void CurentSessionsRefresh()
-        {
             CurentSessions = new ObservableCollection<SessionModel>(Sessions);
+
+            CurentSessions.Insert(0, null);
         }
 
 
-
-
-
-
-
-        public SessionsVM(IServiceProvider serviceProvider, ISessionService sessionService, UserAuthToken userAuthToken, IPlayerService playerService)
+        public SessionsVM(IServiceProvider serviceProvider)
         {
-            ServiceProvider = serviceProvider;
-            SessionService = sessionService;
-            UserAuthToken = userAuthToken;
-            PlayerService = playerService;
+            serviceProvider.UseDI(this);
 
-            CreateSessionCommand = new RelayCommand(CreateSession);
-            EditSessionCommand = new RelayCommand(EditSession);
-            ExitSessionCommand = new RelayCommand(ExitSession);
-            JoinSessionCommand = new RelayCommand(JoinSession);
+            ExitSessionCommand = ICommand.From<SessionModel>(ExitSession);
+            JoinSessionCommand = ICommand.From<object>(JoinSession);
 
             GetSessions();
         }
