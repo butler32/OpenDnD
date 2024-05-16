@@ -1,0 +1,10 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <SolidColorBrush Color="#1B263B" x:Key="PrimaryColorBrush" x:Name="PrimaryColorBrush"/>
+    <SolidColorBrush Color="#34495E" x:Key="PrimaryHoverColorBrush" x:Name="PrimaryHoverColorBrush"/>
+
+    <Color R="27" G="38" B="59" x:Key="PrimaryColor"/>
+    <Color R="52" G="73" B="94" x:Key="PrimaryHoverColor"/>
+
+</ResourceDictionary>

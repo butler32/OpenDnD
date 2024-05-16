@@ -18,6 +18,7 @@
                 <ResourceDictionary Source="Styles/Templates.xaml" />
                 <ResourceDictionary Source="Styles/Converters.xaml" />
                 <ResourceDictionary Source="Styles/Images.xaml" />
+                <ResourceDictionary Source="Styles/StyleColors.xaml" />
 
             </ResourceDictionary.MergedDictionaries>
             

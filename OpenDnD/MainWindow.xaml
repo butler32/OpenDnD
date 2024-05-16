@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:vm="clr-namespace:OpenDnD.ViewModel"
+        xmlns:c="clr-namespace:OpenDnD.Styles"
         xmlns:Menu="clr-namespace:OpenDnD.Utilities"
         xmlns:Icon="http://metro.mahapps.com/winfx/xaml/iconpacks"
         xmlns:local="clr-namespace:OpenDnD" 
@@ -41,7 +42,7 @@
 
         <Grid Grid.Row="1">
 
-            <Border Background="#522a14"
+            <Border Background="{Binding Source={x:Static c:StyleColors.BackgroundColorBrush}}"
             CornerRadius="0 0 20 20" />
 
             <!-- Base Grid -->

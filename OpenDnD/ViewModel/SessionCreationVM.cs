@@ -10,11 +10,12 @@ namespace OpenDnD.ViewModel
 {
     class SessionCreationVM : ViewModelBase
     {
-        public SessionCreationVM(IServiceProvider serviceProvider)
+        public SessionCreationVM(IServiceProvider serviceProvider, SessionModel sessionModel)
         {
             serviceProvider.UseDI(this);
 
             SaveCommand = ICommand.From(Save);
+            CurrentSession = sessionModel;
 
             Init();
         }
@@ -52,11 +53,22 @@ namespace OpenDnD.ViewModel
 
         private void Save()
         {
-            SessionService.Update(UserAuthToken.AuthToken, CurrentSession.SessionId, new SessionRequest
+            if (CurrentSession.SessionId == Guid.Empty)
             {
-                SessionName = CurrentSession.SessionName,
-                PlayersIds = CurrentSession.PlayersIds,
-            });
+                SessionService.Create(UserAuthToken.AuthToken, new SessionRequest
+                {
+                    SessionName = CurrentSession.SessionName,
+                    PlayersIds = CurrentSession.PlayersIds,
+                });
+            }
+            else
+            {
+                SessionService.Update(UserAuthToken.AuthToken, CurrentSession.SessionId, new SessionRequest
+                {
+                    SessionName = CurrentSession.SessionName,
+                    PlayersIds = CurrentSession.PlayersIds,
+                });
+            }
         }
 
         private void Invite()

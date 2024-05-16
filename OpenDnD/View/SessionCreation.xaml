@@ -15,7 +15,7 @@
             <RowDefinition />
         </Grid.RowDefinitions>
 
-        <TextBox Grid.Row="0" Width="350" HorizontalAlignment="Center" Text="{Binding CurrentSession.SessionName}" />
+        <TextBox Style="{StaticResource BaseTextBox}" Grid.Row="0" Width="350" HorizontalAlignment="Center" Text="{Binding CurrentSession.SessionName}" />
 
         <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
             <ItemsControl ItemsSource="{Binding PlayersList}">

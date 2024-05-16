@@ -1,5 +1,6 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:c="clr-namespace:OpenDnD.Styles">
 
 
     <!--#region Top Panel Buttons-->
@@ -325,7 +326,7 @@
 
                         <Border.Background>
                             <SolidColorBrush x:Name="BorderBackground"
-                                             Color="#CF843C" />
+                                             Color="#1B263B" />
                         </Border.Background>
 
                         <Grid>
@@ -362,10 +363,9 @@
                             <BeginStoryboard>
                                 <Storyboard>
                                     <ColorAnimation Storyboard.TargetName="BorderBackground"
-                                                    Storyboard.TargetProperty="Color"
-                                                    From="#CF843C"
-                                                    To="#a3662c"
-                                                    Duration="0:0:0.3" />
+                                                    Storyboard.TargetProperty="(SolidColorBrush.Color)"
+                                                    To="{DynamicResource PrimaryHoverColor}"
+                                                    Duration="0:0:0.3"/>
                                 </Storyboard>
                             </BeginStoryboard>
 
@@ -377,10 +377,9 @@
                             <BeginStoryboard>
                                 <Storyboard>
                                     <ColorAnimation Storyboard.TargetName="BorderBackground"
-                                                    Storyboard.TargetProperty="Color"
-                                                    From="#a3662c"
-                                                    To="#CF843C"
-                                                    Duration="0:0:0.3" />
+                                                    Storyboard.TargetProperty="(SolidColorBrush.Color)"
+                                                    To="{DynamicResource PrimaryColor}"
+                                                    Duration="0:0:0.3"/>
                                 </Storyboard>
                             </BeginStoryboard>
 
@@ -391,7 +390,7 @@
 
                             <Setter Property="Background"
                                     TargetName="border"
-                                    Value="#a3662c" />
+                                    Value="#34495E" />
 
                             <Setter Property="Visibility"
                                     TargetName="Indicator"

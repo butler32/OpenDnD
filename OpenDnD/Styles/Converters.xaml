@@ -6,4 +6,6 @@
 
     <util:NullToVisibilityConverter x:Key="NullToVis"/>
 
+    <util:StaticPropertyToColorConverter x:Key="StaticPropToColor"/>
+
 </ResourceDictionary>

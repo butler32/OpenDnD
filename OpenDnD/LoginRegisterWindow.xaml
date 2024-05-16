@@ -50,7 +50,7 @@
                                Panel.ZIndex="1" IsHitTestVisible="False" Text="Введите логин"
                                Visibility="{Binding ElementName=loginEnter, Path=Text.IsEmpty, Converter={StaticResource BoolToVis}}" />
 
-                    <TextBox x:Name="loginEnter" Text="{Binding UserName}" />
+                    <TextBox Style="{StaticResource LoginTextBox}" x:Name="loginEnter" Text="{Binding UserName}" />
                 </Grid>
 
                 <Grid>
@@ -59,7 +59,7 @@
                                Visibility="{Binding ElementName=passwordTextBox, Path=Text.IsEmpty, Converter={StaticResource BoolToVis}}" />
 
 
-                    <TextBox x:Name="passwordTextBox" Text="{Binding Password}" />
+                    <TextBox Style="{StaticResource LoginTextBox}" x:Name="passwordTextBox" Text="{Binding Password}" />
                 </Grid>
 
                 <Grid Margin="0 10 0 0">

@@ -10,6 +10,7 @@ using OpenDnD.ViewModel;
 using OpenDnD.Windows;
 using System.IO;
 using System.Windows;
+using System.Windows.Media;
 
 namespace OpenDnD
 {
@@ -98,6 +99,14 @@ namespace OpenDnD
             {
                 var context = scope.ServiceProvider.GetRequiredService<OpenDnDContext>();
                 context.Database.Migrate();
+            }
+
+            List<Brush> colors = new List<Brush>();
+            colors.Add((Brush)FindResource("PrimaryHoverColorBrush"));
+            colors.Add((Brush)FindResource("PrimaryColorBrush"));
+            foreach(var color in colors)
+            {
+                color.Freeze();
             }
 
             var loginRegWindow = Host.Services.GetRequiredService<LoginRegisterWindow>();
